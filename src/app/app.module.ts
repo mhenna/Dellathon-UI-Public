@@ -10,14 +10,16 @@ import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgZorroAntdModule, NZ_I18N, en_US, zh_CN} from 'ng-zorro-antd';
 import { registerLocaleData } from '@angular/common';
-import zh from '@angular/common/locales/zh';
 import { FooterComponent } from './footer/footer.component';
 import { CommonModule } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { HttpModule } from '@angular/http';
 
 
-registerLocaleData(zh);
+
+import { SignupFormComponent } from './signup-form/signup-form.component';
+
+registerLocaleData(en);
 
 @NgModule({
   declarations: [
@@ -25,6 +27,7 @@ registerLocaleData(zh);
     HomeComponent,
     HeaderComponent,
     FooterComponent,
+    SignupFormComponent
   ],
   imports: [
     BrowserModule,
