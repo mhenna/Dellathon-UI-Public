@@ -3,7 +3,7 @@ import { Response, Headers, RequestOptions } from '@angular/http';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import "rxjs";
-
+import * as mime from 'mime-types'
 @Injectable({
   providedIn: 'root'
 })
@@ -19,6 +19,30 @@ export class UserService {
       reqHeaders.append('Access-Control-Allow-Origin', '*');
       this.http.post("http://localhost:3200/validateOrgCode", {'code':code, 'numberOfMembers': numOfMembers})
       .subscribe((data) => resolve(data), err => reject(err));
+    });
+  }
+
+  postFile(file, nationalID): Observable<string> {
+    return Observable.create(observer => {
+      const data = new FormData();
+      data.append('file', file)
+      if (file ==  undefined || file == null) {
+        data.append('extension', '');
+      }
+      else {
+        const ext = '.' + mime.extension(mime.lookup(file.name));
+        // const ext = ''
+        data.append('extension', ext);
+      }
+      data.append('nationalID', nationalID)
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST',  'http://localhost:3200/upload');
+      xhr.onload = () => {
+        observer.next(xhr.status);
+        observer.complete();
+      };
+      console.log(file)
+      xhr.send(data);
     });
   }
 

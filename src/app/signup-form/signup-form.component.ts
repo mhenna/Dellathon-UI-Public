@@ -17,7 +17,7 @@ import {UserService} from '../services/user.service'
   styleUrls: ['./signup-form.component.css']
 })
 export class SignupFormComponent implements OnInit {
-
+  fileToUpload: any;
   error = false;
   codeValid = false;
   team = false;
@@ -136,6 +136,19 @@ export class SignupFormComponent implements OnInit {
 
   onUpload(event) {
     console.log(event)
+  }
+
+  handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0);
+    this.uploadFileToActivity()
+  }
+
+  uploadFileToActivity() {
+    this.userservice.postFile(this.fileToUpload, this.signupForm.value.nationalID).subscribe(data => {
+      // do something, if upload success
+      }, error => {
+        console.log(error);
+      });
   }
 
 }
