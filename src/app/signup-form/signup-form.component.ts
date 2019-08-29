@@ -3,7 +3,8 @@ import {
   FormBuilder,
   FormGroup,
   FormControl,
-  Validators
+  Validators,
+  ReactiveFormsModule
 } from '@angular/forms';
 
 @Component({
@@ -30,7 +31,7 @@ export class SignupFormComponent implements OnInit {
       Validators.required,
       // Validators.pattern("^[a-z0-9._%+-]+@(dell|emc)\.com$")
     ]),
-    yearsExperience: new FormControl('', [
+    typeOfTeam: new FormControl('', [
       Validators.required,
       // Validators.pattern(/^-?(0|[1-9]\d*)?$/)
     ]),

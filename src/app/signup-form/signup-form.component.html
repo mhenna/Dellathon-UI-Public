@@ -8,9 +8,9 @@
     <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Are you a/an</nz-form-label>
     <nz-form-control [nzSm]="16" [nzXs]="24">
       <nz-select formControlName="typeOfTeam" style="width:200px">
-        <nz-option>Individual</nz-option>
-        <nz-option>Team of 2</nz-option>
-        <nz-option>Team of 4</nz-option>
+        <nz-option nzValue="Individual" nzLabel="Individual"></nz-option>
+        <nz-option nzValue="Team of 2" nzLabel="Team of 2"></nz-option>
+        <nz-option nzValue="Team of 4" nzLabel="Team of 4"></nz-option>
       </nz-select>
     </nz-form-control>
   </nz-form-item>
