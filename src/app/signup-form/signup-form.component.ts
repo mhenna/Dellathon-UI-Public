@@ -3,8 +3,12 @@ import {
   FormBuilder,
   FormGroup,
   FormControl,
-  Validators
+  Validators,
+  ReactiveFormsModule
 } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
+
 
 @Component({
   selector: 'app-signup-form',
@@ -14,7 +18,14 @@ import {
 export class SignupFormComponent implements OnInit {
 
   error = false;
+  codeValid = false;
+  individualFlag = true;
+  team2flag = false;
+  team4flag = false;
+  formCounter = 1;
   validateForm: FormGroup;
+  showCompany = false;
+  showUniveristy = false;
 
   signupForm = new FormGroup({
 
@@ -30,42 +41,21 @@ export class SignupFormComponent implements OnInit {
       Validators.required,
       // Validators.pattern("^[a-z0-9._%+-]+@(dell|emc)\.com$")
     ]),
-    yearsExperience: new FormControl('', [
+    DoB: new FormControl('', [
+      Validators.required,
+    ]),
+    Gender: new FormControl('', [
+      Validators.required,
+    ]),
+    company_university: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[a-zA-Z ]+')
+    ]),
+    typeOfTeam: new FormControl('', [
       Validators.required,
       // Validators.pattern(/^-?(0|[1-9]\d*)?$/)
     ]),
-    yearsOrganization: new FormControl('', [
-      Validators.required,
-      // Validators.pattern(/^-?(0|[1-9]\d*)?$/)
-    ]),
-    yearsInRole: new FormControl('', [
-      Validators.required,
-      // Validators.pattern(/^-?(0|[1-9]\d*)?$/)
-    ]),
-    capacity: new FormControl('', [
-      Validators.required,
-      Validators.pattern(/^-?(0|[1-9]\d*)?$/)
-    ]),
-    department: new FormControl('', [
-      Validators.required,
-      //Validators.pattern('[a-zA-Z ]+')
-    ]),
-    position: new FormControl('', [
-      Validators.required,
-      Validators.pattern('[a-zA-Z ]+')
-    ]),
-    location: new FormControl('', [
-      Validators.required,
-      Validators.pattern('[a-zA-Z ]+')
-    ]),
-    directManager: new FormControl('', [
-      Validators.required,
-      Validators.pattern('[a-zA-Z ]+')
-    ]),
-    iscoach: new FormControl('', [
-      Validators.required,
-      Validators.pattern('[a-zA-Z ]+')
-    ]),
+
 
 
   });
@@ -82,6 +72,15 @@ export class SignupFormComponent implements OnInit {
 
   afterClose() {
     this.error = false;
+  }
+  loadCode() {
+    this.codeValid = true
+  }
+  checkShowComapanyBox(){
+    this.showUniveristy = false;
+  }
+  checkShowUploadUnivID(){
+    this.showCompany = false;
   }
 
 }
