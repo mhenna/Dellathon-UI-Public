@@ -10,8 +10,16 @@
       Registration Code
     </h1>
     <h1>
-      <input>
-  
+      <nz-form-item>
+          <nz-form-control>
+            <input nz-input id="regCode" formControlName="regCode" style="width: 200px;">
+            <!-- <nz-form-explain
+              *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
+              Please input your first name!</nz-form-explain>
+              <nz-form-explain *ngIf="editForm.get('firstName').errors && editForm.get('firstName').errors.pattern">Must
+                only include characters!</nz-form-explain> -->
+              </nz-form-control>
+          </nz-form-item>
     <nz-form-item>
       <nz-form-label   nzFor="typeofteam" nzRequired>Are you a/an</nz-form-label>
       <nz-form-control >
@@ -150,7 +158,7 @@
                     <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Upload National ID</nz-form-label>
                     <nz-form-control [nzSm]="16" [nzXs]="24">
                       <nz-upload nzAction="">
-                        <button nz-button><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
+                        <button nz-button (click)="onUpload($event)"><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
                       </nz-upload>
                         
                           </nz-form-control>

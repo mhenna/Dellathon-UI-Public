@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
+import {UserService} from '../services/user.service'
 
 
 @Component({
@@ -24,12 +25,16 @@ export class SignupFormComponent implements OnInit {
   team2flag = [0, 1];
   team4flag = [0, 1, 2, 3];
   formCounter = [0, 1];
+  numberOfMembers = 1;
   validateForm: FormGroup;
   showCompany = false;
   showUniveristy = false;
 
   signupForm = new FormGroup({
-
+    regCode: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[a-zA-Z ]+')
+    ]),
     firstName: new FormControl('', [
       Validators.required,
       Validators.pattern('[a-zA-Z ]+')
@@ -72,14 +77,16 @@ export class SignupFormComponent implements OnInit {
 
 
   });
+
+  constructor(private userservice: UserService) {
+
+  }
   submitForm(): void {
     Object.keys(this.validateForm.controls).forEach(key => {
       this.validateForm.get(key).markAsDirty();
       this.validateForm.get(key).updateValueAndValidity();
     });
   }
-  constructor() { }
-
   ngOnInit() {
   }
 
@@ -101,15 +108,22 @@ export class SignupFormComponent implements OnInit {
     {
       this.team = true;
       this.formCounter = this.team2flag
+      this.numberOfMembers = 2;
     }
     if(this.signupForm.value.typeOfTeam === "Team of 4")
     {
       this.team = true;
       this.formCounter = this.team4flag
+      this.numberOfMembers = 4
     }
 
     //if code is valid do this
-    this.codeValid = true
+    var res
+    res = this.userservice.validateCode(this.signupForm.value.regCode, this.numberOfMembers)
+    console.log("res", res)
+
+
+      this.codeValid = true
     //if univeristy 
     //
   }
@@ -118,6 +132,10 @@ export class SignupFormComponent implements OnInit {
   }
   checkShowUploadUnivID(){
     this.showCompany = false;
+  }
+
+  onUpload(event) {
+    console.log(event)
   }
 
 }
