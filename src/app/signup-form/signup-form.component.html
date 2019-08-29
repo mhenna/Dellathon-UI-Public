@@ -1,0 +1,17 @@
+<form nz-form [formGroup]="signupForm">
+  <nz-alert nzType="error" nzCloseable nzMessage="Error "
+    nzDescription="Please fill in all the required information so you can complete your sign up process"
+    (nzOnClose)="afterClose()" *ngIf="error">
+  </nz-alert>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Are you a/an</nz-form-label>
+    <nz-form-control [nzSm]="16" [nzXs]="24">
+      <nz-select formControlName="typeOfTeam" style="width:200px">
+        <nz-option>Individual</nz-option>
+        <nz-option>Team of 2</nz-option>
+        <nz-option>Team of 4</nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+</form>
