@@ -18,17 +18,27 @@ import {UserService} from '../services/user.service'
 })
 export class SignupFormComponent implements OnInit {
 
+  errorCode = false
   error = false;
   codeValid = false;
   team = false;
   individualFlag = [0];
   team2flag = [0, 1];
   team4flag = [0, 1, 2, 3];
-  formCounter = [0, 1];
+  formCounter = [0];
   numberOfMembers = 1;
   validateForm: FormGroup;
   showCompany = false;
   showUniveristy = false;
+  notFinished = true;
+  counter = 1;
+  emailList = []
+  organization= "";
+  teamName = "Dell";
+
+  participants = []
+  
+
 
   signupForm = new FormGroup({
     regCode: new FormControl('', [
@@ -65,7 +75,7 @@ export class SignupFormComponent implements OnInit {
       Validators.required,
       Validators.pattern('[a-zA-Z ]+')
     ]),
-    company_university: new FormControl('', [
+    organization: new FormControl('', [
       Validators.required,
       Validators.pattern('[a-zA-Z ]+')
     ]),
@@ -98,32 +108,91 @@ export class SignupFormComponent implements OnInit {
     console.log("HHHHH")
   }
 
-  loadCode() {
+  refreshAndAdd(){
+    this.counter+= 1
+    if(this.counter == this.numberOfMembers)
+    {
+      this.notFinished = false
+
+    }
+
+    
+    let par: Participant = {
+      firstName : this.signupForm.value.firstName,
+      lastName:this.signupForm.value.lastName,
+      idFullName:this.signupForm.value.fullName,
+      birthDate:this.signupForm.value.DoB,
+      gender:this.signupForm.value.Gender,
+      email:this.signupForm.value.email,
+      organization:this.organization,
+      nationalID:this.signupForm.value.nationalID
+    }
+    this.participants.push(par)
+    this.emailList.push(par.email)
+
+    
+
+    if(this.counter == this.numberOfMembers+1)
+    {
+      this.register()
+
+    } else {
+      this.signupForm.reset();
+    }
+    
+  }
+  async register(){
+    
+    console.log(this.participants)
+    try{
+       await this.userservice.registerParticipants(this.participants)
+       await this.userservice.registerTeam(this.teamName, this.numberOfMembers, this.emailList)
+    }
+    catch(error)
+    {
+    
+      console.log("EEEEEERRRRRRRRROOOOOOOOORRRRRRRRRRR", error)
+    }
+  }
+
+  async loadCode() {
     if(this.signupForm.value.typeOfTeam === "Individual")
     {
       this.team = false;
-      this.formCounter = this.individualFlag
     }
     if(this.signupForm.value.typeOfTeam === "Team of 2")
     {
       this.team = true;
-      this.formCounter = this.team2flag
       this.numberOfMembers = 2;
     }
     if(this.signupForm.value.typeOfTeam === "Team of 4")
     {
       this.team = true;
-      this.formCounter = this.team4flag
       this.numberOfMembers = 4
     }
 
     //if code is valid do this
     var res
-    res = this.userservice.validateCode(this.signupForm.value.regCode, this.numberOfMembers)
     console.log("res", res)
+    try{
+      res = await this.userservice.validateCode(this.signupForm.value.regCode, this.numberOfMembers)
+      if(res.data.name)
+        this.codeValid = true
+      if(res.data.type === "University")
+      {
+        this.showUniveristy = true;
+        this.organization = res.data.name
+      }      
+      if(res.data.type === "Company")
+        this.organization = res.data.name        
+    }catch(error){
+      this.errorCode = true
+    }
 
 
-      this.codeValid = true
+
+
+      
     //if univeristy 
     //
   }
@@ -138,4 +207,15 @@ export class SignupFormComponent implements OnInit {
     console.log(event)
   }
 
+}
+
+interface Participant {
+  firstName: String,
+  lastName:String,
+  idFullName:String,
+  birthDate:Date,
+  gender:String,
+  email:String,
+  organization:String,
+  nationalID:String
 }

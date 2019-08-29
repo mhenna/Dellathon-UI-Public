@@ -22,4 +22,24 @@ export class UserService {
     });
   }
 
+  registerParticipants(participants):Promise<any>{
+    return new Promise((resolve, reject) => {
+      const reqHeaders: HttpHeaders = new HttpHeaders();
+      reqHeaders.append('Content-Type', 'application/json');
+      reqHeaders.append('Access-Control-Allow-Origin', '*');
+      this.http.post("http://localhost:3200/addUser", {'participants':participants})
+      .subscribe((data) => resolve(data), err => reject(err));
+    });
+  }
+
+  registerTeam(teamName, typeOfTeam, members):Promise<any>{
+    return new Promise((resolve, reject) => {
+      const reqHeaders: HttpHeaders = new HttpHeaders();
+      reqHeaders.append('Content-Type', 'application/json');
+      reqHeaders.append('Access-Control-Allow-Origin', '*');
+      this.http.post("http://localhost:3200/addTeam", {'typeOfTeam':typeOfTeam, 'members':members, 'name': teamName})
+      .subscribe((data) => resolve(data), err => reject(err));
+    });
+  }
+
 }

@@ -4,6 +4,11 @@
     nzDescription="Please fill in all the required information so you can complete your sign up process"
     (nzOnClose)="afterClose()" *ngIf="error">
   </nz-alert>
+
+  <nz-alert nzType="error" nzCloseable nzMessage="Error "
+    nzDescription="Code is Incorrect"
+     *ngIf="errorCode">
+  </nz-alert>
 <form nz-form [formGroup]="signupForm" >
   <div *ngIf="!codeValid">
     <h1>
@@ -30,14 +35,7 @@
           </nz-select>
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item>
-          <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="nickname" nzRequired>Organisation</nz-form-label>
-          <nz-form-control [nzSm]="12" [nzXs]="24">
-              <input type="checkbox" [(ngModel)]="showCompany" [ngModelOptions]="{standalone: true}" (ngModelChange)="checkShowComapanyBox()" style="margin-right: auto" name="chk1" value="bb"> Customer-Partner
-              <input type="checkbox" [(ngModel)]="showCompany" [ngModelOptions]="{standalone: true}" (ngModelChange)="checkShowComapanyBox()" style="margin-right: auto" name="chk2" value="aa"> Dell Employee<br>              
-              <input type="checkbox" [(ngModel)]="showUniveristy" [ngModelOptions]="{standalone: true}" (ngModelChange)="checkShowUploadUnivID()" style="margin-right: auto" name="chk2" value="aa"> Univeristy<br>              
-            </nz-form-control>
-        </nz-form-item>
+   
          <button nz-button nzType="primary" style="margin-top: 5px"(click)="loadCode()"
             >Check</button>
                       
@@ -56,14 +54,14 @@
               only include characters!</nz-form-explain> -->
             </nz-form-control>
         </nz-form-item>
-    <div *ngFor="let team of formCounter" >
+    <!-- <div *ngFor="let team of formCounter" > -->
         <nz-form-item>
         <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname">Personal Information</nz-form-label>
         </nz-form-item>
         <nz-form-item>
           <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>First Name</nz-form-label>
           <nz-form-control [nzSm]="16" [nzXs]="24">
-            <input nz-input id="firstName" formControlName="firstName" style="width: 200px;">
+            <input nz-input id="firstName" formControlName="firstName" style="width: 200px;"><br>
             <!-- <nz-form-explain
               *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
               Please input your first name!</nz-form-explain>
@@ -126,7 +124,7 @@
                 <nz-form-item *ngIf="showCompany">
                     <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" >Company</nz-form-label>
                     <nz-form-control [nzSm]="16" [nzXs]="24">
-                      <input nz-input id="company" formControlName="company_university" style="width: 200px;">
+                      <input nz-input id="company" formControlName="organisation" style="width: 200px;">
                       <!-- <nz-form-explain
                         *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
                         Please input your first name!</nz-form-explain>
@@ -144,7 +142,7 @@
                           </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" >National ID</nz-form-label>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>National ID</nz-form-label>
                     <nz-form-control [nzSm]="16" [nzXs]="24">
                       <input nz-input id="nationalID" formControlName="nationalID" style="width: 200px;">
                       <!-- <nz-form-explain
@@ -163,7 +161,15 @@
                         
                           </nz-form-control>
                 </nz-form-item>
-      </div>
+                <nz-form-item *ngIf="!team || !notFinished">
+                    <button nz-button nzType="primary" style="margin-top: 5px"(click)="refreshAndAdd()"
+                    >Submit</button>
+                </nz-form-item>
+                <nz-form-item *ngIf="team && notFinished">
+                    <button nz-button nzType="primary" style="margin-top: 5px"(click)="refreshAndAdd()"
+                    >Next Member</button>
+                </nz-form-item>
+      <!-- </div> -->
 
   </div>
               
