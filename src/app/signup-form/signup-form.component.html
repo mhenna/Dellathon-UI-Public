@@ -1,28 +1,20 @@
 
-<div *ngIf="!codeValid">
-  <h1>
-    Organization Code:
-  </h1>
-  <h1>
-    <input>
 
-  </h1>
-  <h1>
-    <button nz-button nzType="primary" style="margin-top: 5px"(click)="loadCode()"
-            >Submit</button>
-
-  </h1>
-</div>
-
-<form nz-form [formGroup]="signupForm" *ngIf="codeValid">
   <nz-alert nzType="error" nzCloseable nzMessage="Error "
     nzDescription="Please fill in all the required information so you can complete your sign up process"
     (nzOnClose)="afterClose()" *ngIf="error">
   </nz-alert>
-  <div>
+<form nz-form [formGroup]="signupForm" >
+  <div *ngIf="!codeValid">
+    <h1>
+      Registration Code
+    </h1>
+    <h1>
+      <input>
+  
     <nz-form-item>
-      <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="typeofteam" nzRequired>Are you a/an</nz-form-label>
-      <nz-form-control [nzSm]="16" [nzXs]="24">
+      <nz-form-label   nzFor="typeofteam" nzRequired>Are you a/an</nz-form-label>
+      <nz-form-control >
         <nz-select formControlName="typeOfTeam" style="width:200px">
             <nz-option nzValue="Individual" nzLabel="Individual"></nz-option>
             <nz-option nzValue="Team of 2" nzLabel="Team of 2"></nz-option>
@@ -30,14 +22,25 @@
           </nz-select>
         </nz-form-control>
       </nz-form-item>
-      
       <nz-form-item>
-          <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname">Personal Information</nz-form-label>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>First Name</nz-form-label>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="nickname" nzRequired>Organisation</nz-form-label>
+          <nz-form-control [nzSm]="12" [nzXs]="24">
+              <input type="checkbox" [(ngModel)]="showCompany" [ngModelOptions]="{standalone: true}" (ngModelChange)="checkShowComapanyBox()" style="margin-right: auto" name="chk1" value="bb"> Customer-Partner
+              <input type="checkbox" [(ngModel)]="showCompany" [ngModelOptions]="{standalone: true}" (ngModelChange)="checkShowComapanyBox()" style="margin-right: auto" name="chk2" value="aa"> Dell Employee<br>              
+              <input type="checkbox" [(ngModel)]="showUniveristy" [ngModelOptions]="{standalone: true}" (ngModelChange)="checkShowUploadUnivID()" style="margin-right: auto" name="chk2" value="aa"> Univeristy<br>              
+            </nz-form-control>
+        </nz-form-item>
+         <button nz-button nzType="primary" style="margin-top: 5px"(click)="loadCode()"
+            >Check</button>
+                      
+        </h1>
+  </div>
+
+  <div *ngIf="codeValid">
+    <nz-form-item *ngIf="team">
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" *ngIf="team">Team Name</nz-form-label>
         <nz-form-control [nzSm]="16" [nzXs]="24">
-          <input nz-input id="firstName" formControlName="firstName" style="width: 200px;">
+          <input nz-input id="teamName" formControlName="teamName" style="width: 200px;">
           <!-- <nz-form-explain
             *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
             Please input your first name!</nz-form-explain>
@@ -45,81 +48,115 @@
               only include characters!</nz-form-explain> -->
             </nz-form-control>
         </nz-form-item>
-      <nz-form-item>
-            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Last Name</nz-form-label>
-            <nz-form-control [nzSm]="16" [nzXs]="24">
-              <input nz-input id="lastName" formControlName="lastName" style="width: 200px;">
-              <!-- <nz-form-explain
-                *ngIf="editForm.get('lastName').dirty && editForm.get('lastName').errors && !editForm.get('lastName').errors.pattern">
-                Please input your first name!</nz-form-explain>
-                <nz-form-explain *ngIf="editForm.get('lastName').errors && editForm.get('lastName').errors.pattern">Must only
-                  include characters!</nz-form-explain> -->
-                </nz-form-control>
-              </nz-form-item>
-              <nz-form-item>
-                  <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired>Date of Birth</nz-form-label>
-                  <nz-form-control [nzSm]="16" [nzXs]="24">
-                    <nz-date-picker nzShowDate nzFormat="yyyy-MM-dd" formControlName="DoB"></nz-date-picker>
-                  </nz-form-control>
-              </nz-form-item>
+    <div *ngFor="let team of formCounter" >
         <nz-form-item>
-              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="Gender" nzRequired>Gender</nz-form-label>
-
-              <nz-form-control [nzSm]="16" [nzXs]="24">
-                <nz-select formControlName="Gender" style="width:200px">
-                    <nz-option nzValue="Male" nzLabel="Male"></nz-option>
-                    <nz-option nzValue="Female" nzLabel="Female"></nz-option>
-                    <nz-option nzValue="Other" nzLabel="Other"></nz-option>
-                  </nz-select>
-                </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>email</nz-form-label>
-              <nz-form-control [nzSm]="16" [nzXs]="24">
-                <input nz-input id="email" formControlName="email" style="width: 200px;">
-                <!-- <nz-form-explain
-                  *ngIf="editForm.get('email').dirty && editForm.get('email').errors && !editForm.get('email').errors.pattern">
-                  Please input your email!</nz-form-explain>
-                <nz-form-explain *ngIf="editForm.get('email').errors && editForm.get('email').errors.pattern">Please enter a
-                  valid email that must be @dell.com or @emc.com!</nz-form-explain> -->
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname">Personal Information</nz-form-label>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>First Name</nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24">
+            <input nz-input id="firstName" formControlName="firstName" style="width: 200px;">
+            <!-- <nz-form-explain
+              *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
+              Please input your first name!</nz-form-explain>
+              <nz-form-explain *ngIf="editForm.get('firstName').errors && editForm.get('firstName').errors.pattern">Must
+                only include characters!</nz-form-explain> -->
               </nz-form-control>
+          </nz-form-item>
+        <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Last Name</nz-form-label>
+              <nz-form-control [nzSm]="16" [nzXs]="24">
+                <input nz-input id="lastName" formControlName="lastName" style="width: 200px;">
+                <!-- <nz-form-explain
+                  *ngIf="editForm.get('lastName').dirty && editForm.get('lastName').errors && !editForm.get('lastName').errors.pattern">
+                  Please input your first name!</nz-form-explain>
+                  <nz-form-explain *ngIf="editForm.get('lastName').errors && editForm.get('lastName').errors.pattern">Must only
+                    include characters!</nz-form-explain> -->
+                  </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Full Name</nz-form-label>
+                    <nz-form-control [nzSm]="16" [nzXs]="24">
+                      <input nz-input id="fullName" formControlName="fullName" style="width: 200px;"><br>
+                      <span><I> Note: Full name should be as your national ID </I></span>
+                      <!-- <nz-form-explain
+                        *ngIf="editForm.get('lastName').dirty && editForm.get('lastName').errors && !editForm.get('lastName').errors.pattern">
+                        Please input your first name!</nz-form-explain>
+                        <nz-form-explain *ngIf="editForm.get('lastName').errors && editForm.get('lastName').errors.pattern">Must only
+                          include characters!</nz-form-explain> -->
+                        </nz-form-control>
+                      </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired>Date of Birth</nz-form-label>
+                    <nz-form-control [nzSm]="16" [nzXs]="24">
+                      <nz-date-picker nzShowDate nzFormat="yyyy-MM-dd" formControlName="DoB"></nz-date-picker>
+                    </nz-form-control>
+                </nz-form-item>
+          <nz-form-item>
+                <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="Gender" nzRequired>Gender</nz-form-label>
+  
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                  <nz-select formControlName="Gender" style="width:200px">
+                      <nz-option nzValue="Male" nzLabel="Male"></nz-option>
+                      <nz-option nzValue="Female" nzLabel="Female"></nz-option>
+                      <nz-option nzValue="Other" nzLabel="Other"></nz-option>
+                    </nz-select>
+                  </nz-form-control>
             </nz-form-item>
             <nz-form-item>
-                <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Organisation</nz-form-label>
+                <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>email</nz-form-label>
                 <nz-form-control [nzSm]="16" [nzXs]="24">
-                    <input type="checkbox" [(ngModel)]="showCompany" [ngModelOptions]="{standalone: true}" (ngModelChange)="checkShowComapanyBox()" style="margin-right: auto" name="chk1" value="bb"> Company
-                    <input type="checkbox" [(ngModel)]="showUniveristy" [ngModelOptions]="{standalone: true}" (ngModelChange)="checkShowUploadUnivID()" style="margin-right: auto" name="chk2" value="aa"> Univeristy<br>              
+                  <input nz-input id="email" formControlName="email" style="width: 200px;">
+                  <!-- <nz-form-explain
+                    *ngIf="editForm.get('email').dirty && editForm.get('email').errors && !editForm.get('email').errors.pattern">
+                    Please input your email!</nz-form-explain>
+                  <nz-form-explain *ngIf="editForm.get('email').errors && editForm.get('email').errors.pattern">Please enter a
+                    valid email that must be @dell.com or @emc.com!</nz-form-explain> -->
                 </nz-form-control>
               </nz-form-item>
-              <nz-form-item *ngIf="showCompany">
-                  <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" >Company</nz-form-label>
-                  <nz-form-control [nzSm]="16" [nzXs]="24">
-                    <input nz-input id="company" formControlName="company_university" style="width: 200px;">
-                    <!-- <nz-form-explain
-                      *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
-                      Please input your first name!</nz-form-explain>
-                      <nz-form-explain *ngIf="editForm.get('firstName').errors && editForm.get('firstName').errors.pattern">Must
-                        only include characters!</nz-form-explain> -->
-                      </nz-form-control>
-                  </nz-form-item>
-              <nz-form-item *ngIf="showUniveristy">
-                  <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Upload University ID</nz-form-label>
-                  <nz-form-control [nzSm]="16" [nzXs]="24">
-                    <nz-upload nzAction="">
-                      <button nz-button><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
-                    </nz-upload>
-                      
+              
+                <nz-form-item *ngIf="showCompany">
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" >Company</nz-form-label>
+                    <nz-form-control [nzSm]="16" [nzXs]="24">
+                      <input nz-input id="company" formControlName="company_university" style="width: 200px;">
+                      <!-- <nz-form-explain
+                        *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
+                        Please input your first name!</nz-form-explain>
+                        <nz-form-explain *ngIf="editForm.get('firstName').errors && editForm.get('firstName').errors.pattern">Must
+                          only include characters!</nz-form-explain> -->
                         </nz-form-control>
-              </nz-form-item>
-              <nz-form-item >
-                  <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Upload National ID</nz-form-label>
-                  <nz-form-control [nzSm]="16" [nzXs]="24">
-                    <nz-upload nzAction="">
-                      <button nz-button><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
-                    </nz-upload>
-                      
+                    </nz-form-item>
+                <nz-form-item *ngIf="showUniveristy">
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Upload University ID</nz-form-label>
+                    <nz-form-control [nzSm]="16" [nzXs]="24">
+                      <nz-upload nzAction="">
+                        <button nz-button><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
+                      </nz-upload>
+                        
+                          </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" >National ID</nz-form-label>
+                    <nz-form-control [nzSm]="16" [nzXs]="24">
+                      <input nz-input id="nationalID" formControlName="nationalID" style="width: 200px;">
+                      <!-- <nz-form-explain
+                        *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
+                        Please input your first name!</nz-form-explain>
+                        <nz-form-explain *ngIf="editForm.get('firstName').errors && editForm.get('firstName').errors.pattern">Must
+                          only include characters!</nz-form-explain> -->
                         </nz-form-control>
-              </nz-form-item>
-    </div>
+                    </nz-form-item>
+                <nz-form-item >
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Upload National ID</nz-form-label>
+                    <nz-form-control [nzSm]="16" [nzXs]="24">
+                      <nz-upload nzAction="">
+                        <button nz-button><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
+                      </nz-upload>
+                        
+                          </nz-form-control>
+                </nz-form-item>
+      </div>
+
+  </div>
               
 </form>
