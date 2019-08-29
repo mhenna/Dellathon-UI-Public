@@ -19,10 +19,11 @@ export class SignupFormComponent implements OnInit {
 
   error = false;
   codeValid = false;
-  individualFlag = true;
-  team2flag = false;
-  team4flag = false;
-  formCounter = 1;
+  team = false;
+  individualFlag = [0];
+  team2flag = [0, 1];
+  team4flag = [0, 1, 2, 3];
+  formCounter = [0, 1];
   validateForm: FormGroup;
   showCompany = false;
   showUniveristy = false;
@@ -37,6 +38,14 @@ export class SignupFormComponent implements OnInit {
       Validators.required,
       Validators.pattern('[a-zA-Z ]+')
     ]),
+    fullName: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[a-zA-Z ]+')
+    ]),
+    teamName: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[a-zA-Z ]+')
+    ]),
     email: new FormControl('', [
       Validators.required,
       // Validators.pattern("^[a-z0-9._%+-]+@(dell|emc)\.com$")
@@ -46,6 +55,10 @@ export class SignupFormComponent implements OnInit {
     ]),
     Gender: new FormControl('', [
       Validators.required,
+    ]),
+    nationalID: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[a-zA-Z ]+')
     ]),
     company_university: new FormControl('', [
       Validators.required,
@@ -73,8 +86,32 @@ export class SignupFormComponent implements OnInit {
   afterClose() {
     this.error = false;
   }
+
+  setCounter(){
+    console.log("HHHHH")
+  }
+
   loadCode() {
+    if(this.signupForm.value.typeOfTeam === "Individual")
+    {
+      this.team = false;
+      this.formCounter = this.individualFlag
+    }
+    if(this.signupForm.value.typeOfTeam === "Team of 2")
+    {
+      this.team = true;
+      this.formCounter = this.team2flag
+    }
+    if(this.signupForm.value.typeOfTeam === "Team of 4")
+    {
+      this.team = true;
+      this.formCounter = this.team4flag
+    }
+
+    //if code is valid do this
     this.codeValid = true
+    //if univeristy 
+    //
   }
   checkShowComapanyBox(){
     this.showUniveristy = false;
