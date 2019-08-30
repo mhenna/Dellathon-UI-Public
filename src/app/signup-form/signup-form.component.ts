@@ -63,7 +63,7 @@ export class SignupFormComponent implements OnInit {
     ]),
     email: new FormControl('', [
       Validators.required,
-      // Validators.pattern("^[a-z0-9._%+-]+@(dell|emc)\.com$")
+      Validators.pattern("^[a-z0-9._%+-]+@[a-z]+\.com$")
     ]),
     DoB: new FormControl('', [
       Validators.required,
@@ -80,8 +80,7 @@ export class SignupFormComponent implements OnInit {
       Validators.pattern('[a-zA-Z ]+')
     ]),
     typeOfTeam: new FormControl('', [
-      Validators.required,
-      // Validators.pattern(/^-?(0|[1-9]\d*)?$/)
+      Validators.required
     ]),
 
 
