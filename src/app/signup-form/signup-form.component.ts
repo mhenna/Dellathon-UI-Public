@@ -6,10 +6,10 @@ import {
   Validators,
   ReactiveFormsModule
 } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzModalService } from 'ng-zorro-antd';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
-import {UserService} from '../services/user.service'
-
+import {UserService} from '../services/user.service';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-signup-form',
@@ -35,19 +35,32 @@ export class SignupFormComponent implements OnInit {
   counter = 1;
   emailList = []
   organization= "";
+  waiverAccept = false;
   teamName = "";
   teamNameFlag = false;
   maxReached = false;
+  teamExists = false;
 
   participants = []
+  startOffValid = false;
+  memberSignupValid = false;
   
+
+  startOffForm = new FormGroup({
+    regCode: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[a-zA-z0-9]+')
+    ]),
+    teamName: new FormControl('', [
+      Validators.pattern('[a-zA-Z ]+')
+    ]),
+    typeOfTeam: new FormControl('', [
+      Validators.required
+    ])
+  })
 
 
   signupForm = new FormGroup({
-    regCode: new FormControl('', [
-      Validators.required,
-      Validators.pattern('[a-zA-Z ]+')
-    ]),
     firstName: new FormControl('', [
       Validators.required,
       Validators.pattern('[a-zA-Z ]+')
@@ -60,13 +73,9 @@ export class SignupFormComponent implements OnInit {
       Validators.required,
       Validators.pattern('[a-zA-Z ]+')
     ]),
-    teamName: new FormControl('', [
-      Validators.required,
-      Validators.pattern('[a-zA-Z ]+')
-    ]),
     email: new FormControl('', [
       Validators.required,
-      // Validators.pattern("^[a-z0-9._%+-]+@(dell|emc)\.com$")
+      Validators.pattern("^[a-z0-9._%+-]+@[a-z]+\.com$")
     ]),
     DoB: new FormControl('', [
       Validators.required,
@@ -76,10 +85,9 @@ export class SignupFormComponent implements OnInit {
     ]),
     nationalID: new FormControl('', [
       Validators.required,
-      Validators.pattern('[0-9]+')
+      Validators.pattern('[0-9]{14}')
     ]),
     organization: new FormControl('', [
-      Validators.required,
       Validators.pattern('[a-zA-Z ]+')
     ]),
     phoneNum: new FormControl('', [
@@ -89,17 +97,15 @@ export class SignupFormComponent implements OnInit {
     tshirtSize: new FormControl('', [
       Validators.required,
     ]),
-
-    typeOfTeam: new FormControl('', [
+    idUpload: new FormControl('', [
       Validators.required,
-      // Validators.pattern(/^-?(0|[1-9]\d*)?$/)
     ]),
-
-
-
+    uniIdUpload: new FormControl('', [
+      Validators.required,
+    ])
   });
 
-  constructor(private userservice: UserService) {
+  constructor(private userservice: UserService, private modalService: NzModalService, private router: Router) {
 
   }
   submitForm(): void {
@@ -108,15 +114,17 @@ export class SignupFormComponent implements OnInit {
       this.validateForm.get(key).updateValueAndValidity();
     });
   }
+
+  checkFormsValidity(): void {
+    this.startOffValid = this.startOffForm.valid
+    this.memberSignupValid = this.signupForm.valid
+  }
+
   ngOnInit() {
   }
 
   afterClose() {
     this.error = false;
-  }
-
-  setCounter(){
-    console.log("HHHHH")
   }
 
   refreshAndAdd(){
@@ -138,7 +146,7 @@ export class SignupFormComponent implements OnInit {
       organization:this.organization,
       nationalID:this.signupForm.value.nationalID,
       phoneNumber:this.signupForm.value.phoneNum,
-      tshirtSize:this.signupForm.value.tshirtSize
+      tshirtSize:this.signupForm.value.tshirtSize,
     }
     this.participants.push(par)
     this.emailList.push(par.email)
@@ -151,6 +159,9 @@ export class SignupFormComponent implements OnInit {
 
     } else {
       this.signupForm.reset();
+      this.fileToUpload = []
+      this.memberSignupValid = false;
+      window.scroll(0,0);
     }
     
   }
@@ -160,48 +171,80 @@ export class SignupFormComponent implements OnInit {
       this.teamName = this.signupForm.value.firstName + this.signupForm.value.nationalID
     }
     else{
-      this.teamName = "teamDell" //should be the one retrieved from the start form of gettingf team name
+      this.teamName = this.startOffForm.value.teamName
     }
     
-    console.log(this.participants)
-    try{
-       try{
-         await this.userservice.registerParticipants(this.participants)
+    // try{
+    //    try{
+    //      await this.userservice.registerParticipants(this.participants, this.numberOfMembers)
 
-       }catch(err){
-        console.log("EEEEEERRRRRRRRRR", err)
-       }
+    //    }catch(err){
+    //     console.log("EEEEEERRRRRRRRRR", err)
+    //    }
+
+    //    await this.userservice.registerTeam(this.teamName, this.numberOfMembers, this.emailList)
+    //    this.router.navigate(["/response"])
+    // }
+    // catch(error)
+    // {
+    
+    //   console.log("EEEEEERRRRRRRRROOOOOOOOORRRRRRRRRRR", error)
+    // }
+    try{
+      var flag = false
+      try{
+        await this.userservice.registerParticipants(this.participants, this.numberOfMembers)
+
+      }catch(err){
+        try{
+          if(err.error.text.includes("User(s) added successfully" && err.status == 200)){
+            flag = false
+          }   
+
+        }catch(err){
+            this.error = true
+            flag = true
+        }
+      }
+      if(flag == false){
 
        await this.userservice.registerTeam(this.teamName, this.numberOfMembers, this.emailList)
-    }
-    catch(error)
-    {
-    
-      console.log("EEEEEERRRRRRRRROOOOOOOOORRRRRRRRRRR", error)
-    }
+       this.router.navigate(["/response"])
+     }
+   }
+   catch(error)
+   {
+   
+     console.log("EEEEEERRRRRRRRROOOOOOOOORRRRRRRRRRR", error)
+   }
   }
 
-  async loadCode() {
-    if(this.signupForm.value.typeOfTeam === "Individual")
+  async teamTypeChanged(){
+    if(this.startOffForm.value.typeOfTeam === "Individual")
     {
       this.team = false;
       this.teamNameFlag = true
     }
-    if(this.signupForm.value.typeOfTeam === "Team of 2")
+    if(this.startOffForm.value.typeOfTeam === "Team of 2")
     {
       this.team = true;
       this.numberOfMembers = 2;
+      this.teamName = this.startOffForm.value.teamName
     }
-    if(this.signupForm.value.typeOfTeam === "Team of 4")
+    if(this.startOffForm.value.typeOfTeam === "Team of 4")
     {
       this.team = true;
       this.numberOfMembers = 4
+      this.teamName = this.startOffForm.value.teamName
     }
+    this.checkFormsValidity()
+  }
 
+  async loadCode() {
     //if code is valid do this
     var res
     try{
-      res = await this.userservice.validateCode(this.signupForm.value.regCode, this.numberOfMembers)
+      res = await this.userservice.validateCode(this.startOffForm.value.regCode, this.numberOfMembers)
       if(res.data.name){
         this.codeValid = true
         this.errorCode = false
@@ -215,23 +258,24 @@ export class SignupFormComponent implements OnInit {
       if(res.data.type === "Company")
         this.organization = res.data.name        
     }catch(error){
-      console.log("Error", error)
-      console.log(error.error.error)
-      if(error.error.error === "Organization code reached limit of usage"){
+      if(error.error.error === "Organization code reached limit of usage"  || error.error.error.includes("quota not sufficient to register the number")){
         this.maxReached = true
         this.errorCode = false
       }
       else{
         this.errorCode = true
         this.maxReached = false
-
       }
     }
-
-
-
-
-      
+    
+    var res2
+    try{
+      res2 = await this.userservice.checkTeamName(this.startOffForm.value.teamName)
+      this.teamExists = false
+    }catch(error){
+      this.teamExists = true
+    }
+       
     //if univeristy 
     //
   }
@@ -246,6 +290,19 @@ export class SignupFormComponent implements OnInit {
     console.log(event)
   }
 
+  waiver(): void {
+      this.modalService.info({
+        nzTitle: 'Waiver',
+        nzContent: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborumLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum..</p>',
+        nzOnOk: () => console.log('')
+      });
+    }
+
+  changeWaiver(){
+      this.waiverAccept = !this.waiverAccept
+      this.checkFormsValidity()
+  }
+  
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
     this.uploadFileToActivity()
@@ -271,5 +328,5 @@ interface Participant {
   organization:String,
   nationalID:String,
   phoneNumber: String,
-  tshirtSize: String
+  tshirtSize: String,
 }
