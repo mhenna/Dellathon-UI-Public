@@ -190,25 +190,25 @@
                           </nz-form-control>
                 </nz-form-item>
 
+                
+                <nz-form-item>
+                  <nz-form-label  [nzSm]="4" [nzXs]="24" nzFor="tshirtSize" nzRequired>Tshirt Size</nz-form-label>
+                  <nz-form-control >
+                    <nz-select formControlName="tshirtSize" style="width:200px">
+                        <nz-option nzValue="Small" nzLabel="Small"></nz-option>
+                        <nz-option nzValue="Medium" nzLabel="Medium"></nz-option>
+                        <nz-option nzValue="Large" nzLabel="Large"></nz-option>
+                        <nz-option nzValue="X-Large" nzLabel="X-Large"></nz-option>
+                        <nz-option nzValue="XX-Large" nzLabel="XX-Large"></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
 
                 <nz-form-item *ngIf="!team || !notFinished" >
                   <nz-form-control [nzSm]="16" [nzXs]="24">
                     <label nz-checkbox formControlName="waiverCheck" (click)= "changeWaiver()">All members included in this form agree to the following </label> <a (click)="waiver()">waiver</a>              
-                   </nz-form-control>
+                    </nz-form-control>
               </nz-form-item>
-
-              <nz-form-item>
-                <nz-form-label  [nzSm]="4" [nzXs]="24" nzFor="tshirtSize" nzRequired>Tshirt Size</nz-form-label>
-                <nz-form-control >
-                  <nz-select formControlName="tshirtSize" style="width:200px">
-                      <nz-option nzValue="Small" nzLabel="Small"></nz-option>
-                      <nz-option nzValue="Medium" nzLabel="Medium"></nz-option>
-                      <nz-option nzValue="Large" nzLabel="Large"></nz-option>
-                      <nz-option nzValue="X-Large" nzLabel="X-Large"></nz-option>
-                      <nz-option nzValue="XX-Large" nzLabel="XX-Large"></nz-option>
-                    </nz-select>
-                  </nz-form-control>
-                </nz-form-item>
 
                 <nz-form-item *ngIf="(!team || !notFinished) && waiverAccept">
                     <button nz-button nzType="primary" style="margin-top: 5px"(click)="refreshAndAdd()"
