@@ -18,6 +18,7 @@ import { HttpModule } from '@angular/http';
 
 
 import { SignupFormComponent } from './signup-form/signup-form.component';
+import { ResponseComponent } from './response/response.component';
 
 registerLocaleData(en);
 
@@ -27,7 +28,8 @@ registerLocaleData(en);
     HomeComponent,
     HeaderComponent,
     FooterComponent,
-    SignupFormComponent
+    SignupFormComponent,
+    ResponseComponent
   ],
   imports: [
     BrowserModule,
