@@ -16,10 +16,10 @@
           Registration Code
         </h1>
         <h1>
-          <nz-form-item>
+          <nz-form-item><br>
+            <span><I> Checking the code consumes quota</I></span>
               <nz-form-control>
-                <input nz-input id="regCode" formControlName="regCode" style="width: 200px;" (change)="checkFormsValidity()"><br>
-                <span><I> Note: Checking the code consumes quota once entered</I></span>
+                <input nz-input id="regCode" formControlName="regCode" style="width: 200px;" (change)="checkFormsValidity()">
                   </nz-form-control>
 
           </nz-form-item>
@@ -53,27 +53,33 @@
           </form>
         </div>
         
+        
         <form nz-form [formGroup]="signupForm" >
           
           <div *ngIf="codeValid">
-
+            
+            <div *ngIf="team">
+              <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname"> Member {{numberOfMembers - 1 }} Information</nz-form-label>
+              </nz-form-item>
+          </div>
+          <div *ngIf="!team">
+              <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname"> Personal Information</nz-form-label>
+              </nz-form-item>
+          </div>
     <!-- <div *ngFor="let team of formCounter" > -->
-        <nz-form-item>
-        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname"><h2>Personal Information:</h2></nz-form-label>
-        </nz-form-item>
         <nz-form-item>
           <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>First Name</nz-form-label>
           <nz-form-control [nzSm]="16" [nzXs]="24">
-            <input nz-input id="firstName" formControlName="firstName" style="width: 200px;" (change)="checkFormsValidity()"><br>
-            <span><I> Alphabetical characters only </I></span>
+            <input nz-input id="firstName" formControlName="firstName" style="width: 200px;" (change)="checkFormsValidity()">
               </nz-form-control>
           </nz-form-item>
 
         <nz-form-item>
               <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Last Name</nz-form-label>
               <nz-form-control [nzSm]="16" [nzXs]="24">
-                <input nz-input id="lastName" formControlName="lastName" style="width: 200px;" (change)="checkFormsValidity()"><br>
-                <span><I> Alphabetical characters only </I></span>
+                <input nz-input id="lastName" formControlName="lastName" style="width: 200px;" (change)="checkFormsValidity()">
                   </nz-form-control>
         </nz-form-item>
 
@@ -96,7 +102,7 @@
                 <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="Gender" nzRequired>Gender</nz-form-label>
   
                 <nz-form-control [nzSm]="16" [nzXs]="24">
-                  <nz-select formControlName="Gender" style="width:200px" (change)="checkFormsValidity()">
+                  <nz-select formControlName="Gender" style="width:200px" (ngModelChange)="checkFormsValidity()">
                       <nz-option nzValue="Male" nzLabel="Male"></nz-option>
                       <nz-option nzValue="Female" nzLabel="Female"></nz-option>
                       <nz-option nzValue="Other" nzLabel="Other"></nz-option>
@@ -116,7 +122,7 @@
               <nz-form-item>
                 <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Phone Number</nz-form-label>
                 <nz-form-control [nzSm]="16" [nzXs]="24">
-                  <input nz-input id="phoneNum" formControlName="phoneNum" style="width: 200px;">
+                  <input nz-input id="phoneNum" formControlName="phoneNum" style="width: 200px;" (change)="checkFormsValidity()">
                 </nz-form-control>
               </nz-form-item>
               
@@ -135,7 +141,7 @@
                         <label for="file">Choose File</label>
                         <input type="file"
                                id="file"
-                               (change)="handleFileInput($event.target.files)">
+                               (change)="handleFileInput($event.target.files);">
                       </div>
                         
                           </nz-form-control>
@@ -162,7 +168,7 @@
                         <label for="file">Choose File</label>
                         <input type="file"
                                id="file"
-                               (change)="handleFileInput($event.target.files)">
+                               (change)="handleFileInput($event.target.files);checkFormsValidity();">
                       </div>
                         
                           </nz-form-control>
@@ -170,7 +176,7 @@
                 <nz-form-item>
                   <nz-form-label  [nzSm]="4" [nzXs]="24" nzFor="tshirtSize" nzRequired>Tshirt Size</nz-form-label>
                   <nz-form-control >
-                    <nz-select formControlName="tshirtSize" style="width:200px">
+                    <nz-select formControlName="tshirtSize" style="width:200px" (ngModelChange)="checkFormsValidity()">
                         <nz-option nzValue="Small" nzLabel="Small"></nz-option>
                         <nz-option nzValue="Medium" nzLabel="Medium"></nz-option>
                         <nz-option nzValue="Large" nzLabel="Large"></nz-option>

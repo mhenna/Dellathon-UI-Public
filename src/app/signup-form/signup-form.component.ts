@@ -96,13 +96,6 @@ export class SignupFormComponent implements OnInit {
       Validators.required,
     ]),
 
-    typeOfTeam: new FormControl('', [
-      Validators.required,
-      // Validators.pattern(/^-?(0|[1-9]\d*)?$/)
-    ]),
-
-
-
   });
 
   constructor(private userservice: UserService) {
@@ -163,6 +156,7 @@ export class SignupFormComponent implements OnInit {
 
     } else {
       this.signupForm.reset();
+      this.memberSignupValid = false;
     }
     
   }
@@ -219,7 +213,7 @@ export class SignupFormComponent implements OnInit {
     //if code is valid do this
     var res
     try{
-      res = await this.userservice.validateCode(this.signupForm.value.regCode, this.numberOfMembers)
+      res = await this.userservice.validateCode(this.startOffForm.value.regCode, this.numberOfMembers)
       if(res.data.name){
         this.codeValid = true
         this.errorCode = false
