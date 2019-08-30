@@ -148,7 +148,7 @@ export class SignupFormComponent implements OnInit {
       organization:this.organization,
       nationalID:this.signupForm.value.nationalID,
       phoneNumber:this.signupForm.value.phoneNum,
-      tshirtSize:this.signupForm.value.tshirtSize
+      tshirtSize:this.signupForm.value.tshirtSize,
     }
     this.participants.push(par)
     this.emailList.push(par.email)
@@ -178,7 +178,7 @@ export class SignupFormComponent implements OnInit {
     console.log(this.participants)
     try{
        try{
-         await this.userservice.registerParticipants(this.participants)
+         await this.userservice.registerParticipants(this.participants, this.numberOfMembers)
 
        }catch(err){
         console.log("EEEEEERRRRRRRRRR", err)
@@ -233,8 +233,6 @@ export class SignupFormComponent implements OnInit {
       if(res.data.type === "Company")
         this.organization = res.data.name        
     }catch(error){
-      console.log("Error", error)
-      console.log(error.error.error)
       if(error.error.error === "Organization code reached limit of usage"){
         this.maxReached = true
         this.errorCode = false
@@ -305,5 +303,5 @@ interface Participant {
   organization:String,
   nationalID:String,
   phoneNumber: String,
-  tshirtSize: String
+  tshirtSize: String,
 }
