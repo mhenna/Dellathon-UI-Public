@@ -9,7 +9,7 @@ import {
 import { NzModalService } from 'ng-zorro-antd';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import {UserService} from '../services/user.service';
-
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-signup-form',
@@ -102,7 +102,7 @@ export class SignupFormComponent implements OnInit {
 
   });
 
-  constructor(private userservice: UserService, private modalService: NzModalService) {
+  constructor(private userservice: UserService, private modalService: NzModalService, private router: Router) {
 
   }
   submitForm(): void {
@@ -176,6 +176,7 @@ export class SignupFormComponent implements OnInit {
        }
 
        await this.userservice.registerTeam(this.teamName, this.numberOfMembers, this.emailList)
+       this.router.navigate(["/response"])
     }
     catch(error)
     {
