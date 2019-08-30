@@ -9,6 +9,12 @@
     nzDescription="Code is Incorrect"
      *ngIf="errorCode">
   </nz-alert>
+
+  <nz-alert nzType="error" nzCloseable nzMessage="Error "
+    nzDescription="Code reached its quota limit!"
+     *ngIf="maxReached">
+  </nz-alert>
+
 <form nz-form [formGroup]="signupForm" >
   <div *ngIf="!codeValid">
     <h1>
@@ -17,7 +23,9 @@
     <h1>
       <nz-form-item>
           <nz-form-control>
-            <input nz-input id="regCode" formControlName="regCode" style="width: 200px;">
+            <input nz-input id="regCode" formControlName="regCode" style="width: 200px;"><br>
+            <span><I> Note: Checking the code consumes quota once entered</I></span>
+
             <!-- <nz-form-explain
               *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
               Please input your first name!</nz-form-explain>
@@ -120,6 +128,17 @@
                     valid email that must be @dell.com or @emc.com!</nz-form-explain> -->
                 </nz-form-control>
               </nz-form-item>
+              <nz-form-item>
+                <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Phone Number</nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                  <input nz-input id="phoneNum" formControlName="phoneNum" style="width: 200px;">
+                  <!-- <nz-form-explain
+                    *ngIf="editForm.get('email').dirty && editForm.get('email').errors && !editForm.get('email').errors.pattern">
+                    Please input your email!</nz-form-explain>
+                  <nz-form-explain *ngIf="editForm.get('email').errors && editForm.get('email').errors.pattern">Please enter a
+                    valid email that must be @dell.com or @emc.com!</nz-form-explain> -->
+                </nz-form-control>
+              </nz-form-item>
               
                 <nz-form-item *ngIf="showCompany">
                     <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" >Company</nz-form-label>
@@ -135,9 +154,12 @@
                 <nz-form-item *ngIf="showUniveristy">
                     <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Upload University ID</nz-form-label>
                     <nz-form-control [nzSm]="16" [nzXs]="24">
-                      <nz-upload nzAction="">
-                        <button nz-button><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
-                      </nz-upload>
+                      <div class="form-group">
+                        <label for="file">Choose File</label>
+                        <input type="file"
+                               id="file"
+                               (change)="handleFileInput($event.target.files)">
+                      </div>
                         
                           </nz-form-control>
                 </nz-form-item>
@@ -155,12 +177,30 @@
                 <nz-form-item >
                     <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Upload National ID</nz-form-label>
                     <nz-form-control [nzSm]="16" [nzXs]="24">
-                      <nz-upload nzAction="">
-                        <button nz-button (click)="onUpload($event)"><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
-                      </nz-upload>
+                      <!-- <nz-upload nzAction="">
+                        <button nz-button id="file" (click)="handleFileInput($event.target.files)"><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
+                      </nz-upload> -->
+                      <div class="form-group">
+                        <label for="file">Choose File</label>
+                        <input type="file"
+                               id="file"
+                               (change)="handleFileInput($event.target.files)">
+                      </div>
                         
                           </nz-form-control>
                 </nz-form-item>
+                <nz-form-item>
+                  <nz-form-label  [nzSm]="4" [nzXs]="24" nzFor="tshirtSize" nzRequired>Tshirt Size</nz-form-label>
+                  <nz-form-control >
+                    <nz-select formControlName="tshirtSize" style="width:200px">
+                        <nz-option nzValue="Small" nzLabel="Small"></nz-option>
+                        <nz-option nzValue="Medium" nzLabel="Medium"></nz-option>
+                        <nz-option nzValue="Large" nzLabel="Large"></nz-option>
+                        <nz-option nzValue="X-Large" nzLabel="X-Large"></nz-option>
+                        <nz-option nzValue="XX-Large" nzLabel="XX-Large"></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
                 <nz-form-item *ngIf="!team || !notFinished">
                     <button nz-button nzType="primary" style="margin-top: 5px"(click)="refreshAndAdd()"
                     >Submit</button>
@@ -174,3 +214,10 @@
   </div>
               
 </form>
+
+<!-- <div class="form-group">
+  <label for="file">Choose File</label>
+  <input type="file"
+         id="file"
+         (change)="handleFileInput($event.target.files)">
+</div> -->
