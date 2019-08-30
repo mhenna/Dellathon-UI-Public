@@ -39,6 +39,7 @@ export class SignupFormComponent implements OnInit {
   teamName = "";
   teamNameFlag = false;
   maxReached = false;
+  regError = false;
 
   participants = []
   
@@ -118,10 +119,6 @@ export class SignupFormComponent implements OnInit {
     this.error = false;
   }
 
-  setCounter(){
-    console.log("HHHHH")
-  }
-
   refreshAndAdd(){
     this.counter+= 1
     if(this.counter == this.numberOfMembers)
@@ -143,12 +140,13 @@ export class SignupFormComponent implements OnInit {
       phoneNumber:this.signupForm.value.phoneNum,
       tshirtSize:this.signupForm.value.tshirtSize,
     }
-    this.participants.push(par)
-    this.emailList.push(par.email)
+      this.participants.push(par)
+      this.emailList.push(par.email)
+
 
     
 
-    if(this.counter == this.numberOfMembers+1)
+    if(this.counter >= this.numberOfMembers+1)
     {
       this.register()
 
@@ -166,17 +164,29 @@ export class SignupFormComponent implements OnInit {
       this.teamName = "teamDell" //should be the one retrieved from the start form of gettingf team name
     }
     
-    console.log(this.participants)
     try{
+       var flag = false
        try{
          await this.userservice.registerParticipants(this.participants, this.numberOfMembers)
 
        }catch(err){
-        console.log("EEEEEERRRRRRRRRR", err)
+         try{
+           if(err.error.text.includes("User(s) added successfully" && err.status == 200)){
+             flag = false
+           }   
+
+         }catch(err){
+             this.participants.pop()
+             this.error = true
+             flag = true
+         }
        }
 
-       await this.userservice.registerTeam(this.teamName, this.numberOfMembers, this.emailList)
-       this.router.navigate(["/response"])
+       if(flag == false){
+
+        await this.userservice.registerTeam(this.teamName, this.numberOfMembers, this.emailList)
+        this.router.navigate(["/response"])
+      }
     }
     catch(error)
     {
@@ -219,7 +229,7 @@ export class SignupFormComponent implements OnInit {
       if(res.data.type === "Company")
         this.organization = res.data.name        
     }catch(error){
-      if(error.error.error === "Organization code reached limit of usage"){
+      if(error.error.error === "Organization code reached limit of usage" || error.error.error.includes("quota not sufficient to register the number")){
         this.maxReached = true
         this.errorCode = false
       }
