@@ -1,8 +1,8 @@
 h1 {
     font-size: 80px;
     text-align: center;
-    font-weight: bold;
-    font-family: 'Courier New', Courier, monospace;
+    font-weight: 200;
+    font-family: Roboto,Arial,Helvetica,sans-serif;
     color: "black";
     opacity: 1;
 }

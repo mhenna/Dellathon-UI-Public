@@ -255,8 +255,11 @@ export class SignupFormComponent implements OnInit {
         this.showUniveristy = true;
         this.organization = res.data.name
       }      
-      if(res.data.type === "Company")
-        this.organization = res.data.name        
+      if(res.data.type === "Company") {
+        this.organization = res.data.name
+        this.signupForm.get('uniIdUpload').setValidators([])
+        this.signupForm.get('uniIdUpload').updateValueAndValidity()
+      }        
     }catch(error){
       if(error.error.error === "Organization code reached limit of usage"  || error.error.error.includes("quota not sufficient to register the number")){
         this.maxReached = true
@@ -309,7 +312,7 @@ export class SignupFormComponent implements OnInit {
   }
 
   uploadFileToActivity() {
-    this.userservice.postFile(this.fileToUpload, this.signupForm.value.nationalID).subscribe(data => {
+    this.userservice.postFile(this.fileToUpload, this.signupForm.value.nationalID, this.signupForm.value.firstName).subscribe(data => {
       // do something, if upload success
       }, error => {
         console.log(error);
