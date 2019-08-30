@@ -6,10 +6,10 @@ import {
   Validators,
   ReactiveFormsModule
 } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzModalService } from 'ng-zorro-antd';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
-import {UserService} from '../services/user.service'
-
+import {UserService} from '../services/user.service';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-signup-form',
@@ -35,6 +35,7 @@ export class SignupFormComponent implements OnInit {
   counter = 1;
   emailList = []
   organization= "";
+  waiverAccept = false;
   teamName = "";
   teamNameFlag = false;
   maxReached = false;
@@ -95,10 +96,14 @@ export class SignupFormComponent implements OnInit {
     tshirtSize: new FormControl('', [
       Validators.required,
     ]),
+    waiverCheck: new FormControl('', [
+      Validators.required
+    ]),
+
 
   });
 
-  constructor(private userservice: UserService) {
+  constructor(private userservice: UserService, private modalService: NzModalService, private router: Router) {
 
   }
   submitForm(): void {
@@ -179,6 +184,7 @@ export class SignupFormComponent implements OnInit {
        }
 
        await this.userservice.registerTeam(this.teamName, this.numberOfMembers, this.emailList)
+       this.router.navigate(["/response"])
     }
     catch(error)
     {
@@ -258,6 +264,18 @@ export class SignupFormComponent implements OnInit {
     console.log(event)
   }
 
+  waiver(): void {
+      this.modalService.info({
+        nzTitle: 'Waiver',
+        nzContent: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborumLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum..</p>',
+        nzOnOk: () => console.log('')
+      });
+    }
+
+  changeWaiver(){
+      this.waiverAccept = this.signupForm.value.waiverCheck
+  }
+  
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
     this.uploadFileToActivity()

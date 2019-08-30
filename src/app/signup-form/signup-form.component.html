@@ -173,6 +173,8 @@
                         
                           </nz-form-control>
                 </nz-form-item>
+
+                
                 <nz-form-item>
                   <nz-form-label  [nzSm]="4" [nzXs]="24" nzFor="tshirtSize" nzRequired>Tshirt Size</nz-form-label>
                   <nz-form-control >
@@ -185,8 +187,15 @@
                       </nz-select>
                     </nz-form-control>
                   </nz-form-item>
-                <nz-form-item *ngIf="!team || !notFinished">
-                    <button nz-button nzType="primary" style="margin-top: 5px"(click)="refreshAndAdd()" [disabled]='!memberSignupValid'
+
+                <nz-form-item *ngIf="!team || !notFinished" >
+                  <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <label nz-checkbox formControlName="waiverCheck" (click)= "changeWaiver()">All members included in this form agree to the following </label> <a (click)="waiver()">waiver</a>              
+                    </nz-form-control>
+              </nz-form-item>
+
+                <nz-form-item *ngIf="(!team || !notFinished)">
+                    <button nz-button nzType="primary" style="margin-top: 5px"(click)="refreshAndAdd()" [disabled]='(!memberSignupValid && waiverAccept)'
                     >Submit</button>
                 </nz-form-item>
                 <nz-form-item *ngIf="team && notFinished">
@@ -194,6 +203,8 @@
                     >Next Member</button>
                 </nz-form-item>
       <!-- </div> -->
+
+   
 
   </div>
               
