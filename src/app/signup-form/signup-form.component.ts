@@ -39,6 +39,7 @@ export class SignupFormComponent implements OnInit {
   teamName = "";
   teamNameFlag = false;
   maxReached = false;
+  teamExists = false;
 
   participants = []
   startOffValid = false;
@@ -215,7 +216,6 @@ export class SignupFormComponent implements OnInit {
   }
 
   async loadCode() {
-
     //if code is valid do this
     var res
     try{
@@ -242,14 +242,17 @@ export class SignupFormComponent implements OnInit {
       else{
         this.errorCode = true
         this.maxReached = false
-
       }
     }
-
-
-
-
-      
+    
+    var res2
+    try{
+      res2 = await this.userservice.checkTeamName(this.startOffForm.value.teamName)
+      this.teamExists = false
+    }catch(error){
+      this.teamExists = true
+    }
+       
     //if univeristy 
     //
   }

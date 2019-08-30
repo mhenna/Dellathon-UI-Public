@@ -10,7 +10,13 @@
      *ngIf="errorCode">
   </nz-alert>
 
-<div *ngIf="!codeValid">
+  <nz-alert nzType="error" nzCloseable nzMessage="Error "
+  nzDescription="This team name already exists!"
+   *ngIf="teamExists">
+  </nz-alert>
+
+
+<div *ngIf="(!codeValid || teamExists)">
   <form nz-form [formGroup]="startOffForm">
       <h1>
           Registration Code
@@ -56,7 +62,7 @@
         
         <form nz-form [formGroup]="signupForm" >
           
-          <div *ngIf="codeValid">
+          <div *ngIf="codeValid && !teamExists">
             
             <div *ngIf="team">
               <nz-form-item>

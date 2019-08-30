@@ -11,6 +11,17 @@ export class UserService {
 
   constructor(private http: HttpClient) {
    }
+
+  checkTeamName(name): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const reqHeaders: HttpHeaders = new HttpHeaders();
+      reqHeaders.append('Content-Type', 'application/json');
+      reqHeaders.append('Access-Control-Allow-Origin', '*');
+      this.http.post("http://localhost:3200/checkTeamName", {'teamName':name})
+      .subscribe((data) => resolve(data), err => reject(err));
+    });
+  }
+
   
   validateCode(code, numOfMembers): Promise<any> {
     return new Promise((resolve, reject) => {
