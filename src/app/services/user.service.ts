@@ -22,12 +22,12 @@ export class UserService {
     });
   }
 
-  registerParticipants(participants):Promise<any>{
+  registerParticipants(participants, numberOfMembers):Promise<any>{
     return new Promise((resolve, reject) => {
       const reqHeaders: HttpHeaders = new HttpHeaders();
       reqHeaders.append('Content-Type', 'application/json');
       reqHeaders.append('Access-Control-Allow-Origin', '*');
-      this.http.post("http://localhost:3200/addUser", {'participants':participants})
+      this.http.post("http://localhost:3200/addUser", {'participants':participants, 'numberOfMembers':numberOfMembers})
       .subscribe((data) => resolve(data), err => reject(err));
     });
   }
