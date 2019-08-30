@@ -39,16 +39,28 @@ export class SignupFormComponent implements OnInit {
   teamName = "";
   teamNameFlag = false;
   maxReached = false;
+  teamExists = false;
 
   participants = []
+  startOffValid = false;
+  memberSignupValid = false;
   
+
+  startOffForm = new FormGroup({
+    regCode: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[a-zA-z0-9]+')
+    ]),
+    teamName: new FormControl('', [
+      Validators.pattern('[a-zA-Z ]+')
+    ]),
+    typeOfTeam: new FormControl('', [
+      Validators.required
+    ])
+  })
 
 
   signupForm = new FormGroup({
-    regCode: new FormControl('', [
-      Validators.required,
-      Validators.pattern('[a-zA-Z ]+')
-    ]),
     firstName: new FormControl('', [
       Validators.required,
       Validators.pattern('[a-zA-Z ]+')
@@ -61,13 +73,9 @@ export class SignupFormComponent implements OnInit {
       Validators.required,
       Validators.pattern('[a-zA-Z ]+')
     ]),
-    teamName: new FormControl('', [
-      Validators.required,
-      Validators.pattern('[a-zA-Z ]+')
-    ]),
     email: new FormControl('', [
       Validators.required,
-      // Validators.pattern("^[a-z0-9._%+-]+@(dell|emc)\.com$")
+      Validators.pattern("^[a-z0-9._%+-]+@[a-z]+\.com$")
     ]),
     DoB: new FormControl('', [
       Validators.required,
@@ -77,10 +85,9 @@ export class SignupFormComponent implements OnInit {
     ]),
     nationalID: new FormControl('', [
       Validators.required,
-      Validators.pattern('[0-9]+')
+      Validators.pattern('[0-9]{14}')
     ]),
     organization: new FormControl('', [
-      Validators.required,
       Validators.pattern('[a-zA-Z ]+')
     ]),
     phoneNum: new FormControl('', [
@@ -89,17 +96,7 @@ export class SignupFormComponent implements OnInit {
     ]),
     tshirtSize: new FormControl('', [
       Validators.required,
-    ]),
-
-    typeOfTeam: new FormControl('', [
-      Validators.required,
-      // Validators.pattern(/^-?(0|[1-9]\d*)?$/)
-    ]),
-    waiverCheck: new FormControl('', [
-      Validators.required
-    ]),
-
-
+    ])
   });
 
   constructor(private userservice: UserService, private modalService: NzModalService, private router: Router) {
@@ -111,6 +108,16 @@ export class SignupFormComponent implements OnInit {
       this.validateForm.get(key).updateValueAndValidity();
     });
   }
+
+  checkFormsValidity(): void {
+    this.startOffValid = this.startOffForm.valid
+    this.memberSignupValid = this.signupForm.valid
+
+    console.log("Signup Valid", this.memberSignupValid)
+    console.log("Waiver Accept", this.waiverAccept)
+    console.log("Submit button is", !(this.memberSignupValid && this.waiverAccept))
+  }
+
   ngOnInit() {
   }
 
@@ -154,6 +161,8 @@ export class SignupFormComponent implements OnInit {
 
     } else {
       this.signupForm.reset();
+      this.memberSignupValid = false;
+      window.scroll(0,0);
     }
     
   }
@@ -163,7 +172,7 @@ export class SignupFormComponent implements OnInit {
       this.teamName = this.signupForm.value.firstName + this.signupForm.value.nationalID
     }
     else{
-      this.teamName = "teamDell" //should be the one retrieved from the start form of gettingf team name
+      this.teamName = this.startOffForm.value.teamName
     }
     
     console.log(this.participants)
@@ -185,27 +194,32 @@ export class SignupFormComponent implements OnInit {
     }
   }
 
-  async loadCode() {
-    if(this.signupForm.value.typeOfTeam === "Individual")
+  async teamTypeChanged(){
+    if(this.startOffForm.value.typeOfTeam === "Individual")
     {
       this.team = false;
       this.teamNameFlag = true
     }
-    if(this.signupForm.value.typeOfTeam === "Team of 2")
+    if(this.startOffForm.value.typeOfTeam === "Team of 2")
     {
       this.team = true;
       this.numberOfMembers = 2;
+      this.teamName = this.startOffForm.value.teamName
     }
-    if(this.signupForm.value.typeOfTeam === "Team of 4")
+    if(this.startOffForm.value.typeOfTeam === "Team of 4")
     {
       this.team = true;
       this.numberOfMembers = 4
+      this.teamName = this.startOffForm.value.teamName
     }
+    this.checkFormsValidity()
+  }
 
+  async loadCode() {
     //if code is valid do this
     var res
     try{
-      res = await this.userservice.validateCode(this.signupForm.value.regCode, this.numberOfMembers)
+      res = await this.userservice.validateCode(this.startOffForm.value.regCode, this.numberOfMembers)
       if(res.data.name){
         this.codeValid = true
         this.errorCode = false
@@ -226,14 +240,17 @@ export class SignupFormComponent implements OnInit {
       else{
         this.errorCode = true
         this.maxReached = false
-
       }
     }
-
-
-
-
-      
+    
+    var res2
+    try{
+      res2 = await this.userservice.checkTeamName(this.startOffForm.value.teamName)
+      this.teamExists = false
+    }catch(error){
+      this.teamExists = true
+    }
+       
     //if univeristy 
     //
   }
@@ -257,7 +274,8 @@ export class SignupFormComponent implements OnInit {
     }
 
   changeWaiver(){
-      this.waiverAccept = this.signupForm.value.waiverCheck
+      this.waiverAccept = !this.waiverAccept
+      this.checkFormsValidity()
   }
   
   handleFileInput(files: FileList) {
