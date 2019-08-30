@@ -37,6 +37,8 @@ export class SignupFormComponent implements OnInit {
   teamName = "Dell";
 
   participants = []
+  startOffValid = false;
+  memberSignupValid = false;
   
 
   startOffForm = new FormGroup({
@@ -49,7 +51,7 @@ export class SignupFormComponent implements OnInit {
     ]),
     typeOfTeam: new FormControl('', [
       Validators.required
-    ]),
+    ])
   })
 
 
@@ -98,9 +100,9 @@ export class SignupFormComponent implements OnInit {
     });
   }
 
-  checkValidity(): boolean {
-    // console.log("The form Valid is", this.signupForm.firstName.valid, this.signupForm.lastName.valid)
-    return this.signupForm.valid
+  checkFormsValidity(): void {
+    this.startOffValid = this.startOffForm.valid
+    this.memberSignupValid = this.signupForm.valid
   }
 
   ngOnInit() {
@@ -178,6 +180,7 @@ export class SignupFormComponent implements OnInit {
       this.numberOfMembers = 4
       this.teamName = this.startOffForm.value.teamName
     }
+    this.checkFormsValidity()
   }
 
   async loadCode() {

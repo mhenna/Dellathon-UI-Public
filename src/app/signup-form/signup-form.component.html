@@ -18,7 +18,7 @@
         <h1>
           <nz-form-item>
               <nz-form-control>
-                <input nz-input id="regCode" formControlName="regCode" style="width: 200px;">
+                <input nz-input id="regCode" formControlName="regCode" style="width: 200px;" (change)="checkFormsValidity()">
 
                   <!-- <nz-form-explain *ngIf="startOffForm.get('regCode').errors && startOffForm.get('regCode').errors.pattern">Must
                     only include characters!</nz-form-explain> -->
@@ -42,7 +42,7 @@
                       <nz-form-label   nzFor="typeofteam" nzRequired>Team Name?</nz-form-label> 
                       <br><span><I>Alphabetical characters only</I></span>
                       <nz-form-control>
-                        <input nz-input id="teamName" formControlName="teamName" style="width: 200px;"> 
+                        <input nz-input id="teamName" formControlName="teamName" style="width: 200px;" (change)="checkFormsValidity()"> 
                         <!-- <nz-form-explain
                           *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
                           Please input your first name!</nz-form-explain>
@@ -52,7 +52,7 @@
                   </nz-form-item>
 
                   
-             <button nz-button nzType="primary" style="margin-top: 5px" (click)="loadCode()"
+             <button nz-button nzType="primary" style="margin-top: 5px" (click)="loadCode()" [disabled]="!startOffValid"
              >Check</button>
              
             </h1>
@@ -66,12 +66,13 @@
 
     <!-- <div *ngFor="let team of formCounter" > -->
         <nz-form-item>
-        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname"><h2>Personal Information</h2></nz-form-label>
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname"><h2>Personal Information:</h2></nz-form-label>
         </nz-form-item>
         <nz-form-item>
           <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>First Name</nz-form-label>
           <nz-form-control [nzSm]="16" [nzXs]="24">
-            <input nz-input id="firstName" formControlName="firstName" style="width: 200px;"><br>
+            <input nz-input id="firstName" formControlName="firstName" style="width: 200px;" (change)="checkFormsValidity()"><br>
+            <span><I> Alphabetical characters only </I></span>
             <!-- <nz-form-explain
               *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
               Please input your first name!</nz-form-explain>
@@ -82,7 +83,8 @@
         <nz-form-item>
               <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Last Name</nz-form-label>
               <nz-form-control [nzSm]="16" [nzXs]="24">
-                <input nz-input id="lastName" formControlName="lastName" style="width: 200px;">
+                <input nz-input id="lastName" formControlName="lastName" style="width: 200px;" (change)="checkFormsValidity()"><br>
+                <span><I> Alphabetical characters only </I></span>
                 <!-- <nz-form-explain
                   *ngIf="editForm.get('lastName').dirty && editForm.get('lastName').errors && !editForm.get('lastName').errors.pattern">
                   Please input your first name!</nz-form-explain>
@@ -93,8 +95,8 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Full Name</nz-form-label>
                     <nz-form-control [nzSm]="16" [nzXs]="24">
-                      <input nz-input id="fullName" formControlName="fullName" style="width: 200px;"><br>
-                      <span><I> Note: Full name should be as your national ID </I></span>
+                      <input nz-input id="fullName" formControlName="fullName" style="width: 200px;" (change)="checkFormsValidity()"><br>
+                      <span><I> Note: Full name should be as your national ID</I></span>
                       <!-- <nz-form-explain
                         *ngIf="editForm.get('lastName').dirty && editForm.get('lastName').errors && !editForm.get('lastName').errors.pattern">
                         Please input your first name!</nz-form-explain>
@@ -105,14 +107,14 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired>Date of Birth</nz-form-label>
                     <nz-form-control [nzSm]="16" [nzXs]="24">
-                      <nz-date-picker nzShowDate nzFormat="yyyy-MM-dd" formControlName="DoB"></nz-date-picker>
+                      <nz-date-picker nzShowDate nzFormat="yyyy-MM-dd" formControlName="DoB" (change)="checkFormsValidity()"></nz-date-picker>
                     </nz-form-control>
                 </nz-form-item>
           <nz-form-item>
                 <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="Gender" nzRequired>Gender</nz-form-label>
   
                 <nz-form-control [nzSm]="16" [nzXs]="24">
-                  <nz-select formControlName="Gender" style="width:200px">
+                  <nz-select formControlName="Gender" style="width:200px" (change)="checkFormsValidity()">
                       <nz-option nzValue="Male" nzLabel="Male"></nz-option>
                       <nz-option nzValue="Female" nzLabel="Female"></nz-option>
                       <nz-option nzValue="Other" nzLabel="Other"></nz-option>
@@ -122,7 +124,7 @@
             <nz-form-item>
                 <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>email</nz-form-label>
                 <nz-form-control [nzSm]="16" [nzXs]="24">
-                  <input nz-input id="email" formControlName="email" style="width: 200px;">
+                  <input nz-input id="email" formControlName="email" style="width: 200px;" (change)="checkFormsValidity()">
                   <!-- <nz-form-explain
                     *ngIf="editForm.get('email').dirty && editForm.get('email').errors && !editForm.get('email').errors.pattern">
                     Please input your email!</nz-form-explain>
@@ -134,7 +136,8 @@
                 <nz-form-item *ngIf="showCompany">
                     <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" >Company</nz-form-label>
                     <nz-form-control [nzSm]="16" [nzXs]="24">
-                      <input nz-input id="company" formControlName="organisation" style="width: 200px;">
+                      <input nz-input id="company" formControlName="organisation" style="width: 200px;" (change)="checkFormsValidity()"><br>
+                      <span><I> Alphabetical Characters only</I></span>
                       <!-- <nz-form-explain
                         *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
                         Please input your first name!</nz-form-explain>
@@ -154,8 +157,8 @@
                 <nz-form-item>
                     <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>National ID Number</nz-form-label>
                     <nz-form-control [nzSm]="16" [nzXs]="24">
-                      <input nz-input id="nationalID" formControlName="nationalID" style="width: 200px;"><br>
-                      <span><I> Note: 14 Digits without any separators </I></span>
+                      <input nz-input id="nationalID" formControlName="nationalID" style="width: 200px;" (change)="checkFormsValidity()"><br>
+                      <span><I> 14 Digits without any separators </I></span>
                       <!-- <nz-form-explain
                         *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
                         Please input your first name!</nz-form-explain>
@@ -173,11 +176,11 @@
                           </nz-form-control>
                 </nz-form-item>
                 <nz-form-item *ngIf="!team || !notFinished">
-                    <button nz-button nzType="primary" style="margin-top: 5px"(click)="refreshAndAdd()" [disabled]='checkValidity()'
+                    <button nz-button nzType="primary" style="margin-top: 5px"(click)="refreshAndAdd()" [disabled]='!memberSignupValid'
                     >Submit</button>
                 </nz-form-item>
                 <nz-form-item *ngIf="team && notFinished">
-                    <button nz-button nzType="primary" style="margin-top: 5px"(click)="refreshAndAdd()" [disabled]='checkValidity()'
+                    <button nz-button nzType="primary" style="margin-top: 5px"(click)="refreshAndAdd()" [disabled]='!memberSignupValid'
                     >Next Member</button>
                 </nz-form-item>
       <!-- </div> -->
