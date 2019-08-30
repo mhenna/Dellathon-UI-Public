@@ -19,6 +19,7 @@ import {UserService} from '../services/user.service';
 export class SignupFormComponent implements OnInit {
 
   errorCode = false
+  fileToUpload: any;
   error = false;
   codeValid = false;
   team = false;
@@ -34,8 +35,10 @@ export class SignupFormComponent implements OnInit {
   counter = 1;
   emailList = []
   organization= "";
-  teamName = "Dell";
   waiverAccept = false;
+  teamName = "";
+  teamNameFlag = false;
+  maxReached = false;
 
   participants = []
   
@@ -74,12 +77,20 @@ export class SignupFormComponent implements OnInit {
     ]),
     nationalID: new FormControl('', [
       Validators.required,
-      Validators.pattern('[a-zA-Z ]+')
+      Validators.pattern('[0-9]+')
     ]),
     organization: new FormControl('', [
       Validators.required,
       Validators.pattern('[a-zA-Z ]+')
     ]),
+    phoneNum: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[0-9]+')
+    ]),
+    tshirtSize: new FormControl('', [
+      Validators.required,
+    ]),
+
     typeOfTeam: new FormControl('', [
       Validators.required,
       // Validators.pattern(/^-?(0|[1-9]\d*)?$/)
@@ -128,7 +139,9 @@ export class SignupFormComponent implements OnInit {
       gender:this.signupForm.value.Gender,
       email:this.signupForm.value.email,
       organization:this.organization,
-      nationalID:this.signupForm.value.nationalID
+      nationalID:this.signupForm.value.nationalID,
+      phoneNumber:this.signupForm.value.phoneNum,
+      tshirtSize:this.signupForm.value.tshirtSize
     }
     this.participants.push(par)
     this.emailList.push(par.email)
@@ -145,10 +158,23 @@ export class SignupFormComponent implements OnInit {
     
   }
   async register(){
+
+    if(this.teamNameFlag){
+      this.teamName = this.signupForm.value.firstName + this.signupForm.value.nationalID
+    }
+    else{
+      this.teamName = "teamDell" //should be the one retrieved from the start form of gettingf team name
+    }
     
     console.log(this.participants)
     try{
-       await this.userservice.registerParticipants(this.participants)
+       try{
+         await this.userservice.registerParticipants(this.participants)
+
+       }catch(err){
+        console.log("EEEEEERRRRRRRRRR", err)
+       }
+
        await this.userservice.registerTeam(this.teamName, this.numberOfMembers, this.emailList)
     }
     catch(error)
@@ -162,6 +188,7 @@ export class SignupFormComponent implements OnInit {
     if(this.signupForm.value.typeOfTeam === "Individual")
     {
       this.team = false;
+      this.teamNameFlag = true
     }
     if(this.signupForm.value.typeOfTeam === "Team of 2")
     {
@@ -176,11 +203,13 @@ export class SignupFormComponent implements OnInit {
 
     //if code is valid do this
     var res
-    console.log("res", res)
     try{
       res = await this.userservice.validateCode(this.signupForm.value.regCode, this.numberOfMembers)
-      if(res.data.name)
+      if(res.data.name){
         this.codeValid = true
+        this.errorCode = false
+        this.maxReached = false
+      }
       if(res.data.type === "University")
       {
         this.showUniveristy = true;
@@ -189,7 +218,17 @@ export class SignupFormComponent implements OnInit {
       if(res.data.type === "Company")
         this.organization = res.data.name        
     }catch(error){
-      this.errorCode = true
+      console.log("Error", error)
+      console.log(error.error.error)
+      if(error.error.error === "Organization code reached limit of usage"){
+        this.maxReached = true
+        this.errorCode = false
+      }
+      else{
+        this.errorCode = true
+        this.maxReached = false
+
+      }
     }
 
 
@@ -222,6 +261,18 @@ export class SignupFormComponent implements OnInit {
       this.waiverAccept = this.signupForm.value.waiverCheck
   }
   
+  handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0);
+    this.uploadFileToActivity()
+  }
+
+  uploadFileToActivity() {
+    this.userservice.postFile(this.fileToUpload, this.signupForm.value.nationalID).subscribe(data => {
+      // do something, if upload success
+      }, error => {
+        console.log(error);
+      });
+  }
 
 }
 
@@ -233,5 +284,7 @@ interface Participant {
   gender:String,
   email:String,
   organization:String,
-  nationalID:String
+  nationalID:String,
+  phoneNumber: String,
+  tshirtSize: String
 }
