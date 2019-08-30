@@ -42,7 +42,7 @@ export class UserService {
     });
   }
   
-  postFile(file, nationalID): Observable<string> {
+  postFile(file, nationalID, idFullName): Observable<string> {
     return Observable.create(observer => {
       const data = new FormData();
       data.append('file', file)
@@ -54,7 +54,8 @@ export class UserService {
         // const ext = ''
         data.append('extension', ext);
       }
-      data.append('nationalID', nationalID)
+      data.append('nationalID', nationalID);
+      data.append('idFullName', idFullName);
       const xhr = new XMLHttpRequest();
       xhr.open('POST',  'http://localhost:3200/upload');
       xhr.onload = () => {

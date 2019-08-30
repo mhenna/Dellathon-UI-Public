@@ -252,7 +252,7 @@ export class SignupFormComponent implements OnInit {
   }
 
   uploadFileToActivity() {
-    this.userservice.postFile(this.fileToUpload, this.signupForm.value.nationalID).subscribe(data => {
+    this.userservice.postFile(this.fileToUpload, this.signupForm.value.nationalID, this.signupForm.value.fullName).subscribe(data => {
       // do something, if upload success
       }, error => {
         console.log(error);
