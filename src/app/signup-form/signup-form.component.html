@@ -15,6 +15,11 @@
    *ngIf="teamExists">
   </nz-alert>
 
+  <nz-alert nzType="error" nzCloseable nzMessage="Error "
+    nzDescription="Code reached its quota limit!"
+     *ngIf="maxReached">
+  </nz-alert>
+
 
 <div *ngIf="(!codeValid || teamExists)">
   <form nz-form [formGroup]="startOffForm">
@@ -23,7 +28,6 @@
         </h1>
         <h1>
           <nz-form-item><br>
-            <span><I> Checking the code consumes quota</I></span>
               <nz-form-control>
                 <input nz-input id="regCode" formControlName="regCode" style="width: 200px;" (change)="checkFormsValidity()">
                   </nz-form-control>
@@ -140,19 +144,7 @@
                         </nz-form-control>
                     </nz-form-item>
 
-                <nz-form-item *ngIf="showUniveristy">
-                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Upload University ID</nz-form-label>
-                    <nz-form-control [nzSm]="16" [nzXs]="24">
-                      <div class="form-group">
-                        <label for="file">Choose File</label>
-                        <input type="file"
-                               id="file"
-                               (change)="handleFileInput($event.target.files);">
-                      </div>
-                        
-                          </nz-form-control>
-                </nz-form-item>
-                <nz-form-item>
+                    <nz-form-item>
                     <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>National ID Number</nz-form-label>
                     <nz-form-control [nzSm]="16" [nzXs]="24">
                       <input nz-input id="nationalID" formControlName="nationalID" style="width: 200px;" (change)="checkFormsValidity()"><br>
@@ -163,22 +155,36 @@
                         <nz-form-explain *ngIf="editForm.get('firstName').errors && editForm.get('firstName').errors.pattern">Must
                           only include characters!</nz-form-explain> -->
                         </nz-form-control>
-                    </nz-form-item>
-                <nz-form-item >
-                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Upload National ID Photo</nz-form-label>
-                    <nz-form-control [nzSm]="16" [nzXs]="24">
-                      <!-- <nz-upload nzAction="">
+                      </nz-form-item>
+                      <nz-form-item >
+                        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Upload National ID Photo</nz-form-label>
+                        <nz-form-control [nzSm]="16" [nzXs]="24">
+                          <!-- <nz-upload nzAction="">
                         <button nz-button id="file" (click)="handleFileInput($event.target.files)"><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
                       </nz-upload> -->
                       <div class="form-group">
                         <label for="file">Choose File</label>
-                        <input type="file"
-                               id="file"
-                               (change)="handleFileInput($event.target.files);checkFormsValidity();">
+                        <input formControlName="idUpload" type="file"
+                        id="file"
+                        (change)="handleFileInput($event.target.files);checkFormsValidity();">
                       </div>
-                        
-                          </nz-form-control>
-                </nz-form-item>
+                      
+                    </nz-form-control>
+                  </nz-form-item>
+                          <nz-form-item *ngIf="showUniveristy">
+                              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Upload University ID</nz-form-label>
+                              <nz-form-control [nzSm]="16" [nzXs]="24">
+                                <div class="form-group">
+                                  <label for="file">Choose File</label>
+                                  <input 
+                                  formControlName="uniIdUpload"
+                                  type="file"
+                                         id="file"
+                                         (change)="handleFileInput($event.target.files);">
+                                </div>
+                                  
+                                    </nz-form-control>
+                          </nz-form-item>
 
                 
                 <nz-form-item>

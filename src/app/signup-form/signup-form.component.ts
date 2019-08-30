@@ -96,6 +96,12 @@ export class SignupFormComponent implements OnInit {
     ]),
     tshirtSize: new FormControl('', [
       Validators.required,
+    ]),
+    idUpload: new FormControl('', [
+      Validators.required,
+    ]),
+    uniIdUpload: new FormControl('', [
+      Validators.required,
     ])
   });
 
@@ -112,10 +118,6 @@ export class SignupFormComponent implements OnInit {
   checkFormsValidity(): void {
     this.startOffValid = this.startOffForm.valid
     this.memberSignupValid = this.signupForm.valid
-
-    console.log("Signup Valid", this.memberSignupValid)
-    console.log("Waiver Accept", this.waiverAccept)
-    console.log("Submit button is", !(this.memberSignupValid && this.waiverAccept))
   }
 
   ngOnInit() {
@@ -123,10 +125,6 @@ export class SignupFormComponent implements OnInit {
 
   afterClose() {
     this.error = false;
-  }
-
-  setCounter(){
-    console.log("HHHHH")
   }
 
   refreshAndAdd(){
@@ -161,6 +159,7 @@ export class SignupFormComponent implements OnInit {
 
     } else {
       this.signupForm.reset();
+      this.fileToUpload = []
       this.memberSignupValid = false;
       window.scroll(0,0);
     }
@@ -175,23 +174,49 @@ export class SignupFormComponent implements OnInit {
       this.teamName = this.startOffForm.value.teamName
     }
     
-    console.log(this.participants)
-    try{
-       try{
-         await this.userservice.registerParticipants(this.participants, this.numberOfMembers)
+    // try{
+    //    try{
+    //      await this.userservice.registerParticipants(this.participants, this.numberOfMembers)
 
-       }catch(err){
-        console.log("EEEEEERRRRRRRRRR", err)
-       }
+    //    }catch(err){
+    //     console.log("EEEEEERRRRRRRRRR", err)
+    //    }
+
+    //    await this.userservice.registerTeam(this.teamName, this.numberOfMembers, this.emailList)
+    //    this.router.navigate(["/response"])
+    // }
+    // catch(error)
+    // {
+    
+    //   console.log("EEEEEERRRRRRRRROOOOOOOOORRRRRRRRRRR", error)
+    // }
+    try{
+      var flag = false
+      try{
+        await this.userservice.registerParticipants(this.participants, this.numberOfMembers)
+
+      }catch(err){
+        try{
+          if(err.error.text.includes("User(s) added successfully" && err.status == 200)){
+            flag = false
+          }   
+
+        }catch(err){
+            this.error = true
+            flag = true
+        }
+      }
+      if(flag == false){
 
        await this.userservice.registerTeam(this.teamName, this.numberOfMembers, this.emailList)
        this.router.navigate(["/response"])
-    }
-    catch(error)
-    {
-    
-      console.log("EEEEEERRRRRRRRROOOOOOOOORRRRRRRRRRR", error)
-    }
+     }
+   }
+   catch(error)
+   {
+   
+     console.log("EEEEEERRRRRRRRROOOOOOOOORRRRRRRRRRR", error)
+   }
   }
 
   async teamTypeChanged(){
@@ -233,7 +258,7 @@ export class SignupFormComponent implements OnInit {
       if(res.data.type === "Company")
         this.organization = res.data.name        
     }catch(error){
-      if(error.error.error === "Organization code reached limit of usage"){
+      if(error.error.error === "Organization code reached limit of usage"  || error.error.error.includes("quota not sufficient to register the number")){
         this.maxReached = true
         this.errorCode = false
       }
