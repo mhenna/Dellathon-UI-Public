@@ -39,12 +39,21 @@ export class SignupFormComponent implements OnInit {
   participants = []
   
 
-
-  signupForm = new FormGroup({
+  startOffForm = new FormGroup({
     regCode: new FormControl('', [
       Validators.required,
+      Validators.pattern('[a-zA-z0-9]+')
+    ]),
+    teamName: new FormControl('', [
       Validators.pattern('[a-zA-Z ]+')
     ]),
+    typeOfTeam: new FormControl('', [
+      Validators.required
+    ]),
+  })
+
+
+  signupForm = new FormGroup({
     firstName: new FormControl('', [
       Validators.required,
       Validators.pattern('[a-zA-Z ]+')
@@ -54,10 +63,6 @@ export class SignupFormComponent implements OnInit {
       Validators.pattern('[a-zA-Z ]+')
     ]),
     fullName: new FormControl('', [
-      Validators.required,
-      Validators.pattern('[a-zA-Z ]+')
-    ]),
-    teamName: new FormControl('', [
       Validators.required,
       Validators.pattern('[a-zA-Z ]+')
     ]),
@@ -73,14 +78,10 @@ export class SignupFormComponent implements OnInit {
     ]),
     nationalID: new FormControl('', [
       Validators.required,
-      Validators.pattern('[a-zA-Z ]+')
+      Validators.pattern('[0-9]{14}')
     ]),
     organization: new FormControl('', [
-      Validators.required,
       Validators.pattern('[a-zA-Z ]+')
-    ]),
-    typeOfTeam: new FormControl('', [
-      Validators.required
     ]),
 
 
@@ -96,6 +97,12 @@ export class SignupFormComponent implements OnInit {
       this.validateForm.get(key).updateValueAndValidity();
     });
   }
+
+  checkValidity(): boolean {
+    // console.log("The form Valid is", this.signupForm.firstName.valid, this.signupForm.lastName.valid)
+    return this.signupForm.valid
+  }
+
   ngOnInit() {
   }
 
@@ -154,27 +161,32 @@ export class SignupFormComponent implements OnInit {
     }
   }
 
-  async loadCode() {
-    if(this.signupForm.value.typeOfTeam === "Individual")
+  async teamTypeChanged(){
+    if(this.startOffForm.value.typeOfTeam === "Individual")
     {
       this.team = false;
     }
-    if(this.signupForm.value.typeOfTeam === "Team of 2")
+    if(this.startOffForm.value.typeOfTeam === "Team of 2")
     {
       this.team = true;
       this.numberOfMembers = 2;
+      this.teamName = this.startOffForm.value.teamName
     }
-    if(this.signupForm.value.typeOfTeam === "Team of 4")
+    if(this.startOffForm.value.typeOfTeam === "Team of 4")
     {
       this.team = true;
       this.numberOfMembers = 4
+      this.teamName = this.startOffForm.value.teamName
     }
+  }
+
+  async loadCode() {
 
     //if code is valid do this
     var res
     console.log("res", res)
     try{
-      res = await this.userservice.validateCode(this.signupForm.value.regCode, this.numberOfMembers)
+      res = await this.userservice.validateCode(this.startOffForm.value.regCode, this.numberOfMembers)
       if(res.data.name)
         this.codeValid = true
       if(res.data.type === "University")

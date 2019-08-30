@@ -9,54 +9,64 @@
     nzDescription="Code is Incorrect"
      *ngIf="errorCode">
   </nz-alert>
-<form nz-form [formGroup]="signupForm" >
-  <div *ngIf="!codeValid">
-    <h1>
-      Registration Code
-    </h1>
-    <h1>
-      <nz-form-item>
-          <nz-form-control>
-            <input nz-input id="regCode" formControlName="regCode" style="width: 200px;">
-            <!-- <nz-form-explain
-              *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
-              Please input your first name!</nz-form-explain>
-              <nz-form-explain *ngIf="editForm.get('firstName').errors && editForm.get('firstName').errors.pattern">Must
-                only include characters!</nz-form-explain> -->
-              </nz-form-control>
-          </nz-form-item>
-    <nz-form-item>
-      <nz-form-label   nzFor="typeofteam" nzRequired>Are you a/an</nz-form-label>
-      <nz-form-control >
-        <nz-select formControlName="typeOfTeam" style="width:200px">
-            <nz-option nzValue="Individual" nzLabel="Individual"></nz-option>
-            <nz-option nzValue="Team of 2" nzLabel="Team of 2"></nz-option>
-            <nz-option nzValue="Team of 4" nzLabel="Team of 4"></nz-option>
-          </nz-select>
-        </nz-form-control>
-      </nz-form-item>
-   
-         <button nz-button nzType="primary" style="margin-top: 5px"(click)="loadCode()"
-            >Check</button>
-                      
-        </h1>
-  </div>
 
-  <div *ngIf="codeValid">
-    <nz-form-item *ngIf="team">
-        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" *ngIf="team">Team Name</nz-form-label>
-        <nz-form-control [nzSm]="16" [nzXs]="24">
-          <input nz-input id="teamName" formControlName="teamName" style="width: 200px;">
-          <!-- <nz-form-explain
-            *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
-            Please input your first name!</nz-form-explain>
-            <nz-form-explain *ngIf="editForm.get('firstName').errors && editForm.get('firstName').errors.pattern">Must
-              only include characters!</nz-form-explain> -->
-            </nz-form-control>
-        </nz-form-item>
+<div *ngIf="!codeValid">
+  <form nz-form [formGroup]="startOffForm">
+      <h1>
+          Registration Code
+        </h1>
+        <h1>
+          <nz-form-item>
+              <nz-form-control>
+                <input nz-input id="regCode" formControlName="regCode" style="width: 200px;">
+
+                  <!-- <nz-form-explain *ngIf="startOffForm.get('regCode').errors && startOffForm.get('regCode').errors.pattern">Must
+                    only include characters!</nz-form-explain> -->
+                  </nz-form-control>
+
+                </nz-form-item>
+
+
+                <nz-form-item>
+                  <nz-form-label   nzFor="typeofteam" nzRequired>Are you a/an</nz-form-label>
+                  <nz-form-control >
+                    <nz-select formControlName="typeOfTeam" style="width:200px" (ngModelChange)="teamTypeChanged()">
+                        <nz-option nzValue="Individual" nzLabel="Individual" nzValue="Individual" ></nz-option>
+                        <nz-option nzValue="Team of 2" nzLabel="Team of 2" nzValue="Team of 2"></nz-option>
+                        <nz-option nzValue="Team of 4" nzLabel="Team of 4" nzValue="Team of 4"></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                  
+                  <nz-form-item *ngIf="team">
+                      <nz-form-label   nzFor="typeofteam" nzRequired>Team Name?</nz-form-label> 
+                      <br><span><I>Alphabetical characters only</I></span>
+                      <nz-form-control>
+                        <input nz-input id="teamName" formControlName="teamName" style="width: 200px;"> 
+                        <!-- <nz-form-explain
+                          *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
+                          Please input your first name!</nz-form-explain>
+                          <nz-form-explain *ngIf="editForm.get('firstName').errors && editForm.get('firstName').errors.pattern">Must
+                            only include characters!</nz-form-explain> -->
+                      </nz-form-control>
+                  </nz-form-item>
+
+                  
+             <button nz-button nzType="primary" style="margin-top: 5px" (click)="loadCode()"
+             >Check</button>
+             
+            </h1>
+            
+          </form>
+        </div>
+        
+        <form nz-form [formGroup]="signupForm" >
+          
+          <div *ngIf="codeValid">
+
     <!-- <div *ngFor="let team of formCounter" > -->
         <nz-form-item>
-        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname">Personal Information</nz-form-label>
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname"><h2>Personal Information</h2></nz-form-label>
         </nz-form-item>
         <nz-form-item>
           <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>First Name</nz-form-label>
@@ -142,9 +152,10 @@
                           </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>National ID</nz-form-label>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>National ID Number</nz-form-label>
                     <nz-form-control [nzSm]="16" [nzXs]="24">
-                      <input nz-input id="nationalID" formControlName="nationalID" style="width: 200px;">
+                      <input nz-input id="nationalID" formControlName="nationalID" style="width: 200px;"><br>
+                      <span><I> Note: 14 Digits without any separators </I></span>
                       <!-- <nz-form-explain
                         *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
                         Please input your first name!</nz-form-explain>
@@ -153,7 +164,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 <nz-form-item >
-                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Upload National ID</nz-form-label>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Upload National ID Photo</nz-form-label>
                     <nz-form-control [nzSm]="16" [nzXs]="24">
                       <nz-upload nzAction="">
                         <button nz-button (click)="onUpload($event)"><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
@@ -162,11 +173,11 @@
                           </nz-form-control>
                 </nz-form-item>
                 <nz-form-item *ngIf="!team || !notFinished">
-                    <button nz-button nzType="primary" style="margin-top: 5px"(click)="refreshAndAdd()"
+                    <button nz-button nzType="primary" style="margin-top: 5px"(click)="refreshAndAdd()" [disabled]='checkValidity()'
                     >Submit</button>
                 </nz-form-item>
                 <nz-form-item *ngIf="team && notFinished">
-                    <button nz-button nzType="primary" style="margin-top: 5px"(click)="refreshAndAdd()"
+                    <button nz-button nzType="primary" style="margin-top: 5px"(click)="refreshAndAdd()" [disabled]='checkValidity()'
                     >Next Member</button>
                 </nz-form-item>
       <!-- </div> -->
