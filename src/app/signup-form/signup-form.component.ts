@@ -95,12 +95,7 @@ export class SignupFormComponent implements OnInit {
     ]),
     tshirtSize: new FormControl('', [
       Validators.required,
-    ]),
-    waiverCheck: new FormControl('', [
-      Validators.required
-    ]),
-
-
+    ])
   });
 
   constructor(private userservice: UserService, private modalService: NzModalService, private router: Router) {
@@ -116,6 +111,10 @@ export class SignupFormComponent implements OnInit {
   checkFormsValidity(): void {
     this.startOffValid = this.startOffForm.valid
     this.memberSignupValid = this.signupForm.valid
+
+    console.log("Signup Valid", this.memberSignupValid)
+    console.log("Waiver Accept", this.waiverAccept)
+    console.log("Submit button is", !(this.memberSignupValid && this.waiverAccept))
   }
 
   ngOnInit() {
@@ -162,6 +161,7 @@ export class SignupFormComponent implements OnInit {
     } else {
       this.signupForm.reset();
       this.memberSignupValid = false;
+      window.scroll(0,0);
     }
     
   }
@@ -171,7 +171,7 @@ export class SignupFormComponent implements OnInit {
       this.teamName = this.signupForm.value.firstName + this.signupForm.value.nationalID
     }
     else{
-      this.teamName = "teamDell" //should be the one retrieved from the start form of gettingf team name
+      this.teamName = this.startOffForm.value.teamName
     }
     
     console.log(this.participants)
@@ -273,7 +273,8 @@ export class SignupFormComponent implements OnInit {
     }
 
   changeWaiver(){
-      this.waiverAccept = this.signupForm.value.waiverCheck
+      this.waiverAccept = !this.waiverAccept
+      this.checkFormsValidity()
   }
   
   handleFileInput(files: FileList) {
