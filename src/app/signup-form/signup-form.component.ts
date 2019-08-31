@@ -75,7 +75,7 @@ export class SignupFormComponent implements OnInit {
     ]),
     email: new FormControl('', [
       Validators.required,
-      Validators.pattern("^[a-z0-9._%+-]+@[a-z]+\.com$")
+      Validators.pattern(/^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/)
     ]),
     DoB: new FormControl('', [
       Validators.required,
@@ -312,7 +312,7 @@ export class SignupFormComponent implements OnInit {
   }
 
   uploadFileToActivity() {
-    this.userservice.postFile(this.fileToUpload, this.signupForm.value.nationalID, this.signupForm.value.firstName).subscribe(data => {
+    this.userservice.postFile(this.fileToUpload, this.signupForm.value.nationalID, this.signupForm.value.fullName).subscribe(data => {
       // do something, if upload success
       }, error => {
         console.log(error);
