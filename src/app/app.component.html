@@ -1,16 +1,16 @@
 <nz-layout class="layout">
-  <nz-header style="position:fixed; width:100%; z-index: 3;">
+  <nz-header style="position:fixed; width:100%; z-index: 3; background: #0076CE">
     <div class="header__logo">
-      <img src="../../assets/dell_logo.png" height="23" width="200" />
+      <img src="../../assets/dell_logo.png" height="24" width="183.88" />
     </div>
     <ul nz-menu [nzTheme]="'dark'" [nzMode]="'horizontal'" style="line-height: 64px;"></ul>
   </nz-header>
   <nz-content style="padding-top: 60px;">
-      <nz-layout style="padding:24px 0; background: #fff">
-          <nz-content style="padding: 0 24px; min-height: 750px; display: flex; flex-direction: column;">
-              <router-outlet></router-outlet>
-          </nz-content>
-      </nz-layout>
-  <app-footer></app-footer>
+    <nz-layout style="padding:24px 0; background: #fff">
+      <nz-content style="padding: 0 24px; min-height: 750px; display: flex; flex-direction: column;">
+        <router-outlet></router-outlet>
+      </nz-content>
+    </nz-layout>
+    <app-footer></app-footer>
   </nz-content>
 </nz-layout>

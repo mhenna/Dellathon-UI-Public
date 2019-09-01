@@ -40,7 +40,6 @@ export class SignupFormComponent implements OnInit {
   teamNameFlag = false;
   maxReached = false;
   teamExists = false;
-
   participants = []
   startOffValid = false;
   memberSignupValid = false;
@@ -85,7 +84,6 @@ export class SignupFormComponent implements OnInit {
     ]),
     nationalID: new FormControl('', [
       Validators.required,
-      Validators.pattern('[0-9]{14}')
     ]),
     organization: new FormControl('', [
       Validators.pattern('[a-zA-Z ]+')
@@ -97,10 +95,19 @@ export class SignupFormComponent implements OnInit {
     tshirtSize: new FormControl('', [
       Validators.required,
     ]),
-    idUpload: new FormControl('', [
+    idUploadFront: new FormControl('', [
       Validators.required,
     ]),
+    idUploadBack: new FormControl('', [
+      Validators.required
+    ]),
+    idUploadPassport: new FormControl('', [
+      Validators.required
+    ]),
     uniIdUpload: new FormControl('', [
+      Validators.required,
+    ]),
+    radioValue: new FormControl('', [
       Validators.required,
     ])
   });
@@ -306,13 +313,24 @@ export class SignupFormComponent implements OnInit {
       this.checkFormsValidity()
   }
   
-  handleFileInput(files: FileList) {
+  handleFileInput(files: FileList, fileType) {
     this.fileToUpload = files.item(0);
-    this.uploadFileToActivity()
+    this.uploadFileToActivity(fileType)
+
+    if (fileType == "p") {
+      this.signupForm.get('idUploadFront').setValidators([])
+      this.signupForm.get('idUploadFront').updateValueAndValidity()
+      this.signupForm.get('idUploadBack').setValidators([])
+      this.signupForm.get('idUploadBack').updateValueAndValidity()
+    }
+    else if (fileType == "idf" || fileType == "idb") {
+      this.signupForm.get('idUploadPassport').setValidators([])
+      this.signupForm.get('idUploadPassport').updateValueAndValidity()
+    }
   }
 
-  uploadFileToActivity() {
-    this.userservice.postFile(this.fileToUpload, this.signupForm.value.nationalID, this.signupForm.value.fullName).subscribe(data => {
+  uploadFileToActivity(fileType) {
+    this.userservice.postFile(this.fileToUpload, this.signupForm.value.nationalID, this.signupForm.value.fullName, fileType).subscribe(data => {
       // do something, if upload success
       }, error => {
         console.log(error);
