@@ -63,12 +63,12 @@
 
     <div *ngIf="team">
       <nz-form-item>
-        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname"> Member {{counter}} Information</nz-form-label>
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" style="font-weight: bold"> Member {{counter}} Information</nz-form-label>
       </nz-form-item>
     </div>
     <div *ngIf="!team">
       <nz-form-item>
-        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname"> Personal Information</nz-form-label>
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" style="font-weight: bold"> Personal Information</nz-form-label>
       </nz-form-item>
     </div>
     <!-- <div *ngFor="let team of formCounter" > -->
@@ -139,9 +139,12 @@
         <span><I> Alphabetical Characters only</I></span>
       </nz-form-control>
     </nz-form-item>
-
+    <nz-radio-group formControlName="radioValue" style="margin-left: 300px;">
+        <label nz-radio nzValue="National ID">National ID</label>
+        <label nz-radio nzValue="Passport">Passport</label>
+      </nz-radio-group>
     <nz-form-item>
-      <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>National ID Number</nz-form-label>
+      <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>ID Number</nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
         <input nz-input id="nationalID" formControlName="nationalID" style="width: 200px;"
           (change)="checkFormsValidity()"><br>
@@ -153,10 +156,6 @@
                           only include characters!</nz-form-explain> -->
       </nz-form-control>
     </nz-form-item>
-    <nz-radio-group formControlName="radioValue" style="margin-left: 120px;">
-        <label nz-radio nzValue="National ID">National ID</label>
-        <label nz-radio nzValue="Passport">Passport</label>
-      </nz-radio-group>
     <nz-form-item *ngIf="signupForm.value.radioValue=='National ID'">
       <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width: 20.667%">Upload Copy of National ID (Front)</nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
@@ -224,12 +223,12 @@
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item *ngIf="!team || !notFinished">
+    <!-- <nz-form-item *ngIf="!team || !notFinished">
       <nz-form-control [nzSm]="16" [nzXs]="24">
         <label nz-checkbox (click)="changeWaiver()">All members included in this form agree to the following </label> <a
           (click)="waiver()">waiver</a>
       </nz-form-control>
-    </nz-form-item>
+    </nz-form-item> -->
 
     <nz-form-item *ngIf="(!team || !notFinished)">
       <button nz-button nzType="primary" style="margin-top: 5px" (click)="refreshAndAdd()"

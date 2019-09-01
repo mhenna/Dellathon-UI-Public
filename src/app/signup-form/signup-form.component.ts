@@ -35,7 +35,7 @@ export class SignupFormComponent implements OnInit {
   counter = 1;
   emailList = []
   organization= "";
-  waiverAccept = false;
+  waiverAccept = true;
   teamName = "";
   teamNameFlag = false;
   maxReached = false;
