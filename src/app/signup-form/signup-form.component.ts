@@ -69,8 +69,7 @@ export class SignupFormComponent implements OnInit {
       Validators.pattern('[a-zA-Z ]+')
     ]),
     fullName: new FormControl('', [
-      Validators.required,
-      Validators.pattern('[a-zA-Z ]+')
+      Validators.required
     ]),
     email: new FormControl('', [
       Validators.required,

@@ -120,6 +120,7 @@
       <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Email</nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
         <input nz-input id="email" formControlName="email" style="width: 200px;" (change)="checkFormsValidity()">
+	<br><span><I>Please use your corporate/university email</I></span>
       </nz-form-control>
     </nz-form-item>
 
@@ -139,7 +140,7 @@
         <span><I> Alphabetical Characters only</I></span>
       </nz-form-control>
     </nz-form-item>
-    <nz-radio-group formControlName="radioValue" style="margin-left: 300px;">
+    <nz-radio-group formControlName="radioValue" style="margin-left: 17%;">
         <label nz-radio nzValue="National ID">National ID</label>
         <label nz-radio nzValue="Passport">Passport</label>
       </nz-radio-group>
