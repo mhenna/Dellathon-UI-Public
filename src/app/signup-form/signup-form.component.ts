@@ -10,6 +10,7 @@ import { NzModalService } from 'ng-zorro-antd';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import {UserService} from '../services/user.service';
 import { Router } from "@angular/router";
+import * as mime from 'mime-types'
 
 @Component({
   selector: 'app-signup-form',
@@ -43,6 +44,7 @@ export class SignupFormComponent implements OnInit {
   participants = []
   startOffValid = false;
   memberSignupValid = false;
+  files = []
   
 
   startOffForm = new FormGroup({
@@ -153,6 +155,7 @@ export class SignupFormComponent implements OnInit {
       nationalID:this.signupForm.value.nationalID,
       phoneNumber:this.signupForm.value.phoneNum,
       tshirtSize:this.signupForm.value.tshirtSize,
+      files:this.files
     }
     this.participants.push(par)
     this.emailList.push(par.email)
@@ -223,6 +226,19 @@ export class SignupFormComponent implements OnInit {
    
      console.log("EEEEEERRRRRRRRROOOOOOOOORRRRRRRRRRR", error)
    }
+
+   for (var i = 0; i < this.participants.length; i = i + 1){
+    console.log('inside i loop')
+    for (var j = 0; j < this.participants[i].files.length; j = j + 1) {
+      console.log('inside j loop')
+      await this.userservice.postFile(this.participants[i].files[j].file, this.participants[i].files[j].nationalID, 
+        this.participants[i].files[j].idFullName, this.participants[i].files[j].fileType).subscribe(data => {
+              // do something, if upload success
+              }, error => {
+                console.log(error);
+              });
+    }
+  }
   }
 
   async teamTypeChanged(){
@@ -314,7 +330,15 @@ export class SignupFormComponent implements OnInit {
   
   handleFileInput(files: FileList, fileType) {
     this.fileToUpload = files.item(0);
-    this.uploadFileToActivity(fileType)
+    const f = {
+      "file": files.item(0),
+      "extension": '.' + mime.extension(mime.lookup(files.item(0).name)),
+      "nationalID": this.signupForm.value.nationalID,
+      "idFullName": this.signupForm.value.fullName,
+      "fileType": fileType
+    }
+    this.files.push(f)
+    // this.uploadFileToActivity(fileType)
 
     if (fileType == "p") {
       this.signupForm.get('idUploadFront').setValidators([])
@@ -328,13 +352,13 @@ export class SignupFormComponent implements OnInit {
     }
   }
 
-  uploadFileToActivity(fileType) {
-    this.userservice.postFile(this.fileToUpload, this.signupForm.value.nationalID, this.signupForm.value.fullName, fileType).subscribe(data => {
-      // do something, if upload success
-      }, error => {
-        console.log(error);
-      });
-  }
+  // uploadFileToActivity(fileType) {
+  //   this.userservice.postFile(this.fileToUpload, this.signupForm.value.nationalID, this.signupForm.value.fullName, fileType).subscribe(data => {
+  //     // do something, if upload success
+  //     }, error => {
+  //       console.log(error);
+  //     });
+  // }
 
 }
 
@@ -349,4 +373,5 @@ interface Participant {
   nationalID:String,
   phoneNumber: String,
   tshirtSize: String,
+  files: any;
 }
