@@ -34,6 +34,7 @@ export class UserService {
   }
 
   registerParticipants(participants, numberOfMembers):Promise<any>{
+    console.log(participants)
     return new Promise((resolve, reject) => {
       const reqHeaders: HttpHeaders = new HttpHeaders();
       reqHeaders.append('Content-Type', 'application/json');
@@ -76,6 +77,16 @@ export class UserService {
       };
       console.log(file)
       xhr.send(data);
+    });
+  }
+
+  idExists(nationalID):Promise<any>{
+    return new Promise((resolve, reject) => {
+      const reqHeaders: HttpHeaders = new HttpHeaders();
+      reqHeaders.append('Content-Type', 'application/json');
+      reqHeaders.append('Access-Control-Allow-Origin', '*');
+      this.http.post("http://ec2-34-222-253-165.us-west-2.compute.amazonaws.com:3200/idExists", {'nationalID':nationalID})
+      .subscribe((data) => resolve(data), err => reject(err));
     });
   }
 

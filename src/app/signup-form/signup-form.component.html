@@ -56,19 +56,22 @@
   </form>
 </div>
 
-
+<nz-alert nzType="error" nzCloseable nzMessage="Error " nzDescription="{{errorMessage}}" *ngIf="!registerUserSuccess">
+</nz-alert>
 <form nz-form [formGroup]="signupForm">
 
   <div *ngIf="codeValid && !teamExists">
 
     <div *ngIf="team">
       <nz-form-item>
-        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" style="font-weight: bold"> Member {{counter}} Information</nz-form-label>
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" style="font-weight: bold"> Member {{counter}} Information
+        </nz-form-label>
       </nz-form-item>
     </div>
     <div *ngIf="!team">
       <nz-form-item>
-        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" style="font-weight: bold"> Personal Information</nz-form-label>
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" style="font-weight: bold"> Personal Information
+        </nz-form-label>
       </nz-form-item>
     </div>
     <!-- <div *ngFor="let team of formCounter" > -->
@@ -120,7 +123,7 @@
       <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>Email</nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
         <input nz-input id="email" formControlName="email" style="width: 200px;" (change)="checkFormsValidity()">
-	<br><span><I>Please use your corporate/university email</I></span>
+        <br><span><I>Please use your corporate/university email</I></span>
       </nz-form-control>
     </nz-form-item>
 
@@ -141,14 +144,16 @@
       </nz-form-control>
     </nz-form-item>
     <nz-radio-group formControlName="radioValue" style="margin-left: 17%;">
-        <label nz-radio nzValue="National ID">National ID</label>
-        <label nz-radio nzValue="Passport">Passport</label>
-      </nz-radio-group>
+      <label nz-radio nzValue="National ID">National ID</label>
+      <label nz-radio nzValue="Passport">Passport</label>
+    </nz-radio-group>
     <nz-form-item>
       <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>ID Number</nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
         <input nz-input id="nationalID" formControlName="nationalID" style="width: 200px;"
-          (change)="checkFormsValidity()"><br>
+          (change)="checkIDExists(this.signupForm.value.nationalID); checkFormsValidity()">
+        <nz-form-explain *ngIf="existingID" style="color: red">{{existingIDMessage}}</nz-form-explain>
+        <br>
         <span><I>National ID for Locals or Passport for foreigners</I></span>
         <!-- <nz-form-explain
                         *ngIf="editForm.get('firstName').dirty && editForm.get('firstName').errors && !editForm.get('firstName').errors.pattern">
@@ -158,7 +163,8 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item *ngIf="signupForm.value.radioValue=='National ID'">
-      <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width: 20.667%">Upload Copy of National ID (Front)</nz-form-label>
+      <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width: 20.667%">Upload Copy of National
+        ID (Front)</nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
         <!-- <nz-upload nzAction="">
                         <button nz-button id="file" (click)="handleFileInput($event.target.files)"><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
@@ -172,39 +178,43 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item *ngIf="signupForm.value.radioValue=='National ID'">
-        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width: 20.667%">Upload Copy of National ID (Back)</nz-form-label>
-        <nz-form-control [nzSm]="16" [nzXs]="24">
-          <!-- <nz-upload nzAction="">
+      <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width: 20.667%">Upload Copy of National
+        ID (Back)</nz-form-label>
+      <nz-form-control [nzSm]="16" [nzXs]="24">
+        <!-- <nz-upload nzAction="">
                           <button nz-button id="file" (click)="handleFileInput($event.target.files)"><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
                         </nz-upload> -->
-          <div class="form-group">
-            <label for="file">Choose File</label>
-            <input formControlName="idUploadBack" type="file" id="file"
-              (change)="handleFileInput($event.target.files, 'idb');checkFormsValidity();">
-          </div>
-  
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item *ngIf="signupForm.value.radioValue=='Passport'">
-          <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width: 20.667%">Upload Copy of Passport</nz-form-label>
-          <nz-form-control [nzSm]="16" [nzXs]="24">
-            <!-- <nz-upload nzAction="">
+        <div class="form-group">
+          <label for="file">Choose File</label>
+          <input formControlName="idUploadBack" type="file" id="file"
+            (change)="handleFileInput($event.target.files, 'idb');checkFormsValidity();">
+        </div>
+
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item *ngIf="signupForm.value.radioValue=='Passport'">
+      <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width: 20.667%">Upload Copy of Passport
+      </nz-form-label>
+      <nz-form-control [nzSm]="16" [nzXs]="24">
+        <!-- <nz-upload nzAction="">
                             <button nz-button id="file" (click)="handleFileInput($event.target.files)"><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
                           </nz-upload> -->
-            <div class="form-group">
-              <label for="file">Choose File</label>
-              <input formControlName="idUploadPassport" type="file" id="file"
-                (change)="handleFileInput($event.target.files, 'p');checkFormsValidity();">
-            </div>
-    
-          </nz-form-control>
-        </nz-form-item>
+        <div class="form-group">
+          <label for="file">Choose File</label>
+          <input formControlName="idUploadPassport" type="file" id="file"
+            (change)="handleFileInput($event.target.files, 'p');checkFormsValidity();">
+        </div>
+
+      </nz-form-control>
+    </nz-form-item>
     <nz-form-item *ngIf="showUniveristy">
-      <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width:20.667%">Upload Copy of University ID</nz-form-label>
+      <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width:20.667%">Upload Copy of University
+        ID</nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
         <div class="form-group">
           <label for="file">Choose File</label>
-          <input formControlName="uniIdUpload" type="file" id="file" (change)="handleFileInput($event.target.files, 'uid');">
+          <input formControlName="uniIdUpload" type="file" id="file"
+            (change)="handleFileInput($event.target.files, 'uid');">
         </div>
 
       </nz-form-control>
@@ -233,11 +243,11 @@
 
     <nz-form-item *ngIf="(!team || !notFinished)">
       <button nz-button nzType="primary" style="margin-top: 5px" (click)="refreshAndAdd()"
-        [disabled]='(!memberSignupValid || !waiverAccept)'>Submit</button>
+        [disabled]='(!memberSignupValid || !waiverAccept || existingID)'>Submit</button>
     </nz-form-item>
     <nz-form-item *ngIf="team && notFinished">
       <button nz-button nzType="primary" style="margin-top: 5px" (click)="refreshAndAdd()"
-        [disabled]='!memberSignupValid'>Next Member</button>
+        [disabled]='!memberSignupValid || existingID'>Next Member</button>
     </nz-form-item>
     <!-- </div> -->
 
