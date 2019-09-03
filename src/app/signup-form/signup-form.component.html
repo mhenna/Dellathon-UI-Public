@@ -95,7 +95,7 @@
       <nz-form-control [nzSm]="16" [nzXs]="24">
         <input nz-input id="fullName" formControlName="fullName" style="width: 200px;"
           (change)="checkFormsValidity()"><br>
-        <span><I> As written in your National ID / Passport</I></span>
+        <span><I> As written in your National ID </I><I style ="font-weight:bold;">(Arabic)</I><I> / Passport (English)</I></span>
       </nz-form-control>
     </nz-form-item>
 
@@ -144,8 +144,8 @@
       </nz-form-control>
     </nz-form-item>
     <nz-radio-group formControlName="radioValue" style="margin-left: 17%;">
-      <label nz-radio nzValue="National ID">National ID</label>
-      <label nz-radio nzValue="Passport">Passport</label>
+      <label nz-radio nzValue="National ID">National ID (Locals)</label>
+      <label nz-radio nzValue="Passport">Passport (Foreigners only)</label>
     </nz-radio-group>
     <nz-form-item>
       <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>ID Number</nz-form-label>
@@ -162,7 +162,7 @@
                           only include characters!</nz-form-explain> -->
       </nz-form-control>
     </nz-form-item>
-    <nz-form-item *ngIf="signupForm.value.radioValue=='National ID'">
+    <nz-form-item *ngIf="signupForm.value.radioValue=='National ID'  && signupForm.value.nationalID !='' && signupForm.value.fullName != ''">
       <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width: 20.667%">Upload Copy of National
         ID (Front)</nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
@@ -173,11 +173,12 @@
           <label for="file">Choose File</label>
           <input formControlName="idUploadFront" type="file" id="file"
             (change)="handleFileInput($event.target.files, 'idf');checkFormsValidity();">
+	<span><I>Photographed or scanned copy</I></span>
         </div>
 
       </nz-form-control>
     </nz-form-item>
-    <nz-form-item *ngIf="signupForm.value.radioValue=='National ID'">
+    <nz-form-item *ngIf="signupForm.value.radioValue=='National ID' && signupForm.value.nationalID !='' && signupForm.value.fullName != ''">
       <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width: 20.667%">Upload Copy of National
         ID (Back)</nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
@@ -188,11 +189,12 @@
           <label for="file">Choose File</label>
           <input formControlName="idUploadBack" type="file" id="file"
             (change)="handleFileInput($event.target.files, 'idb');checkFormsValidity();">
+	<span><I>Photographed or scanned copy</I></span>
         </div>
 
       </nz-form-control>
     </nz-form-item>
-    <nz-form-item *ngIf="signupForm.value.radioValue=='Passport'">
+    <nz-form-item *ngIf="signupForm.value.radioValue=='Passport'  && signupForm.value.nationalID !='' && signupForm.value.fullName != ''">
       <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width: 20.667%">Upload Copy of Passport
       </nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
@@ -203,11 +205,12 @@
           <label for="file">Choose File</label>
           <input formControlName="idUploadPassport" type="file" id="file"
             (change)="handleFileInput($event.target.files, 'p');checkFormsValidity();">
+	<span><I>Photographed or scanned copy</I></span>
         </div>
 
       </nz-form-control>
     </nz-form-item>
-    <nz-form-item *ngIf="showUniveristy">
+    <nz-form-item *ngIf="showUniveristy && signupForm.value.nationalID !='' && signupForm.value.fullName != ''">
       <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width:20.667%">Upload Copy of University
         ID</nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
@@ -215,6 +218,7 @@
           <label for="file">Choose File</label>
           <input formControlName="uniIdUpload" type="file" id="file"
             (change)="handleFileInput($event.target.files, 'uid');">
+	<span><I>Photographed or scanned copy</I></span>
         </div>
 
       </nz-form-control>
@@ -252,7 +256,8 @@
     <!-- </div> -->
 
 
-
+	<span><I>Please do not use the back and forward navigation buttons <br>
+    Please bear in mind that your information along with all your team members' information is not submitted unless you click on </I><I style = "font-weight:bold">Submit</I><I> at the very end</I></span>
   </div>
 
 </form>
