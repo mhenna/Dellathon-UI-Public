@@ -143,8 +143,8 @@
         <span><I> Alphabetical Characters only</I></span>
       </nz-form-control>
     </nz-form-item>
-    <nz-radio-group formControlName="radioValue" style="margin-left: 17%;">
-      <label nz-radio nzValue="National ID">National ID (Locals)</label>
+    <nz-radio-group formControlName="radioValue" style="margin-left: 17%;" (click)="clearFiles()">
+      <label nz-radio nzValue="National ID" >National ID (Locals)</label>
       <label nz-radio nzValue="Passport">Passport (Foreigners only)</label>
     </nz-radio-group>
     <nz-form-item>

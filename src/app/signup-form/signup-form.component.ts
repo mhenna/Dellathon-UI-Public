@@ -327,6 +327,7 @@ export class SignupFormComponent implements OnInit {
 
   handleFileInput(files: FileList, fileType) {
     this.fileToUpload = files.item(0);
+
     const f = {
       "file": files.item(0),
       "extension": '.' + mime.extension(mime.lookup(files.item(0).name)),
@@ -334,7 +335,22 @@ export class SignupFormComponent implements OnInit {
       "idFullName": this.signupForm.value.fullName,
       "fileType": fileType
     }
-    this.files.push(f)
+    var flag = true
+    for (var i = 0; i < this.files.length; i += 1) {
+      if (this.files[i].fileType == fileType) {
+        flag = false
+        this.files[i] = {
+          "file": files.item(0),
+          "extension": '.' + mime.extension(mime.lookup(files.item(0).name)),
+          "nationalID": this.signupForm.value.nationalID,
+          "idFullName": this.signupForm.value.fullName,
+          "fileType": fileType
+        }
+      }
+    }
+    
+    if (flag)
+      this.files.push(f)
     // this.uploadFileToActivity(fileType)
 
     if (fileType == "p") {
@@ -362,14 +378,31 @@ export class SignupFormComponent implements OnInit {
       }
       if (c == 0)
         this.existingID = false
-      
-        console.log(c)
+
+      console.log(c)
 
     } catch (err) {
       console.log(err.error)
       this.existingID = true;
       this.existingIDMessage = err.error
     }
+  }
+
+  async clearFiles() {
+    console.log("HIIIIIIIIIIIII")
+    for (var i = 0; i < this.files.length; i += 1) {
+      console.log(this.files[i])
+      if (this.files[i].fileType == "idf" || this.files[i].fileType == "idb"
+        || this.files[i].fileType == "p") {
+        console.log(this.files[i])
+        this.files.splice(i, 1)
+        console.log(this.files[i])
+      }
+    }
+    this.signupForm.get('idUploadFront').reset()
+    this.signupForm.get('idUploadBack').reset()
+    this.signupForm.get('idUploadPassport').reset()
+
   }
 
   // uploadFileToActivity(fileType) {

@@ -17,7 +17,7 @@ export class UserService {
       const reqHeaders: HttpHeaders = new HttpHeaders();
       reqHeaders.append('Content-Type', 'application/json');
       reqHeaders.append('Access-Control-Allow-Origin', '*');
-      this.http.post("http://ec2-34-222-253-165.us-west-2.compute.amazonaws.com:3200/checkTeamName", {'teamName':name})
+      this.http.post("http://localhost:3200/checkTeamName", {'teamName':name})
       .subscribe((data) => resolve(data), err => reject(err));
     });
   }
@@ -28,7 +28,7 @@ export class UserService {
       const reqHeaders: HttpHeaders = new HttpHeaders();
       reqHeaders.append('Content-Type', 'application/json');
       reqHeaders.append('Access-Control-Allow-Origin', '*');
-      this.http.post("http://ec2-34-222-253-165.us-west-2.compute.amazonaws.com:3200/validateOrgCode", {'code':code, 'numberOfMembers': numOfMembers})
+      this.http.post("http://localhost:3200/validateOrgCode", {'code':code, 'numberOfMembers': numOfMembers})
       .subscribe((data) => resolve(data), err => reject(err));
     });
   }
@@ -39,7 +39,7 @@ export class UserService {
       const reqHeaders: HttpHeaders = new HttpHeaders();
       reqHeaders.append('Content-Type', 'application/json');
       reqHeaders.append('Access-Control-Allow-Origin', '*');
-      this.http.post("http://ec2-34-222-253-165.us-west-2.compute.amazonaws.com:3200/addUser", {'participants':participants, 'numberOfMembers':numberOfMembers})
+      this.http.post("http://localhost:3200/addUser", {'participants':participants, 'numberOfMembers':numberOfMembers})
       .subscribe((data) => resolve(data), err => reject(err));
     });
   }
@@ -49,7 +49,7 @@ export class UserService {
       const reqHeaders: HttpHeaders = new HttpHeaders();
       reqHeaders.append('Content-Type', 'application/json');
       reqHeaders.append('Access-Control-Allow-Origin', '*');
-      this.http.post("http://ec2-34-222-253-165.us-west-2.compute.amazonaws.com:3200/addTeam", {'typeOfTeam':typeOfTeam, 'members':members, 'name': teamName})
+      this.http.post("http://localhost:3200/addTeam", {'typeOfTeam':typeOfTeam, 'members':members, 'name': teamName})
       .subscribe((data) => resolve(data), err => reject(err));
     });
   }
@@ -70,7 +70,7 @@ export class UserService {
       data.append('idFullName', idFullName);
       data.append('fileType', fileType)
       const xhr = new XMLHttpRequest();
-      xhr.open('POST',  'http://ec2-34-222-253-165.us-west-2.compute.amazonaws.com:3200/upload');
+      xhr.open('POST',  'http://localhost:3200/upload');
       xhr.onload = () => {
         observer.next(xhr.status);
         observer.complete();
@@ -85,7 +85,7 @@ export class UserService {
       const reqHeaders: HttpHeaders = new HttpHeaders();
       reqHeaders.append('Content-Type', 'application/json');
       reqHeaders.append('Access-Control-Allow-Origin', '*');
-      this.http.post("http://ec2-34-222-253-165.us-west-2.compute.amazonaws.com:3200/idExists", {'nationalID':nationalID})
+      this.http.post("http://localhost:3200/idExists", {'nationalID':nationalID})
       .subscribe((data) => resolve(data), err => reject(err));
     });
   }
