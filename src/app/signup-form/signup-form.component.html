@@ -163,7 +163,8 @@
                           only include characters!</nz-form-explain> -->
       </nz-form-control>
     </nz-form-item>
-    <nz-form-item *ngIf="signupForm.value.radioValue=='National ID'  && signupForm.value.nationalID !='' && signupForm.value.fullName != ''">
+    <nz-form-item *ngIf="signupForm.value.radioValue=='National ID'  && signupForm.value.nationalID !='' && signupForm.value.fullName != '' && 
+    signupForm.value.nationalID != null && signupForm.value.radioValue != null && signupForm.value.fullName != null">
       <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width: 20.667%">Upload Copy of National
         ID (Front)</nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
@@ -179,7 +180,8 @@
 
       </nz-form-control>
     </nz-form-item>
-    <nz-form-item *ngIf="signupForm.value.radioValue=='National ID' && signupForm.value.nationalID !='' && signupForm.value.fullName != ''">
+    <nz-form-item *ngIf="signupForm.value.radioValue=='National ID' && signupForm.value.nationalID !='' && signupForm.value.fullName != '' && 
+    signupForm.value.nationalID != null && signupForm.value.radioValue != null && signupForm.value.fullName != null">
       <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width: 20.667%">Upload Copy of National
         ID (Back)</nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
@@ -195,7 +197,8 @@
 
       </nz-form-control>
     </nz-form-item>
-    <nz-form-item *ngIf="signupForm.value.radioValue=='Passport'  && signupForm.value.nationalID !='' && signupForm.value.fullName != ''">
+    <nz-form-item *ngIf="signupForm.value.radioValue=='Passport'  && signupForm.value.nationalID !='' && signupForm.value.fullName != '' && 
+    signupForm.value.nationalID != null && signupForm.value.radioValue != null && signupForm.value.fullName != null">
       <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width: 20.667%">Upload Copy of Passport
       </nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
@@ -211,7 +214,8 @@
 
       </nz-form-control>
     </nz-form-item>
-    <nz-form-item *ngIf="showUniveristy && signupForm.value.nationalID !='' && signupForm.value.fullName != ''">
+    <nz-form-item *ngIf="showUniveristy && signupForm.value.nationalID !='' && signupForm.value.fullName != '' && 
+    signupForm.value.nationalID != null && signupForm.value.radioValue != null && signupForm.value.fullName != null">
       <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired style="width:20.667%">Upload Copy of University
         ID</nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">

@@ -161,14 +161,16 @@ export class SignupFormComponent implements OnInit {
       tshirtSize: this.signupForm.value.tshirtSize,
       files: this.files
     }
+    for (var i = 0; i < this.files.length; i += 1)
+      this.files[i].nationalID = this.signupForm.value.nationalID
     this.participants.push(par)
     this.emailList.push(par.email)
-
-
-
+    
+    
+    
     if (this.counter == this.numberOfMembers + 1) {
       this.register()
-
+      
     } else if(this.registerUserSuccess) {
       this.signupForm.reset();
       this.files = []
@@ -200,7 +202,7 @@ export class SignupFormComponent implements OnInit {
         flag = true
         this.loading = false
         this.registerUserSuccess = false
-        this.errorMessage = "A users with the same national ID number is already registered"
+        this.errorMessage = "Error during registration, try again later or contact us"
         return
       }
       if (flag == false) {
