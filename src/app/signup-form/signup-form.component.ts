@@ -36,7 +36,7 @@ export class SignupFormComponent implements OnInit {
   counter = 1;
   emailList = []
   organization = "";
-  waiverAccept = true;
+  waiverAccept = false;
   teamName = "";
   teamNameFlag = false;
   maxReached = false;
@@ -49,6 +49,8 @@ export class SignupFormComponent implements OnInit {
   errorMessage = "";
   existingID = false;
   existingIDMessage = "";
+  loading = false;
+  submittedForm = false;
 
   startOffForm = new FormGroup({
     regCode: new FormControl('', [
@@ -167,7 +169,7 @@ export class SignupFormComponent implements OnInit {
     if (this.counter == this.numberOfMembers + 1) {
       this.register()
 
-    } else if (this.registerUserSuccess) {
+    } else if(this.registerUserSuccess) {
       this.signupForm.reset();
       this.files = []
       this.fileToUpload = []
@@ -175,7 +177,7 @@ export class SignupFormComponent implements OnInit {
       this.errorMessage = "";
       this.registerUserSuccess = true;
       this.existingID = false;
-      this.existingIDMessage = ""
+      this.existingIDMessage = "";
       window.scroll(0, 0);
     }
 
@@ -189,51 +191,40 @@ export class SignupFormComponent implements OnInit {
       this.teamName = this.startOffForm.value.teamName
     }
 
-    // try{
-    //    try{
-    //      await this.userservice.registerParticipants(this.participants, this.numberOfMembers)
-
-    //    }catch(err){
-    //     console.log("EEEEEERRRRRRRRRR", err)
-    //    }
-
-    //    await this.userservice.registerTeam(this.teamName, this.numberOfMembers, this.emailList)
-    //    this.router.navigate(["/response"])
-    // }
-    // catch(error)
-    // {
-
-    //   console.log("EEEEEERRRRRRRRROOOOOOOOORRRRRRRRRRR", error)
-    // }
-    // {"error":"Error adding user, ValidationError: nationalID: Path `nationalID` (17) is not unique."}
     try {
       var flag = false
       try {
-        await this.userservice.registerParticipants(this.participants, this.numberOfMembers)
+        this.loading = true
+        await this.userservice.registerParticipants(this.participants, this.teamName, this.emailList, this.numberOfMembers)
       } catch (err) {
         flag = true
+        this.loading = false
         this.registerUserSuccess = false
         this.errorMessage = "A users with the same national ID number is already registered"
         return
       }
       if (flag == false) {
         try {
-          await this.userservice.registerTeam(this.teamName, this.numberOfMembers, this.emailList)
-
           for (var i = 0; i < this.participants.length; i = i + 1) {
             for (var j = 0; j < this.participants[i].files.length; j = j + 1) {
               await this.userservice.postFile(this.participants[i].files[j].file, this.participants[i].files[j].nationalID,
-                this.participants[i].files[j].idFullName, this.participants[i].files[j].fileType).subscribe(data => {
-                  // do something, if upload success
-                }, error => {
-                  console.log(error);
-                });
+                this.participants[i].files[j].idFullName, this.participants[i].files[j].fileType).subscribe(data => { }, error => {
+                  this.registerUserSuccess = false;
+                  this.errorMessage = "Error during registration, try again later or contact us"
+                  this.loading = false;
+                  return
+                })
             }
           }
+
+          setTimeout(() => {
+            this.loading = false;
+            this.router.navigate(['/response']);
+          }, 10000);
+
         } catch (err) {
           throw Error(err);
         }
-        this.router.navigate(["/response"])
       }
     }
     catch (error) {
@@ -315,7 +306,7 @@ export class SignupFormComponent implements OnInit {
   waiver(): void {
     this.modalService.info({
       nzTitle: 'Waiver',
-      nzContent: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborumLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum..</p>',
+      nzContent: "<p>Dell Technologies/ Marathon 2019 Waiver of Participation<br><br> I hereby confirm that I am at least 18 years old, I certify that I’m in a good health, and that I’m medically fit and properly trained to be participating in Dell Technologies/ Marathon 2019 (“Event”) organized by Dell Technologies (“Organizer”). I also confirm my knowledge that my participation may lead to injuries or fatal accidents.<br><br>I also agree to abide by all the Rules & Regulations as provided and as will be provided to me by The Organizer including the right of any official to deny or suspend my participation for any reason whatsoever. I also attest to abide by any decision of any Event official related to my ability to safely complete the event.<br><br>Having read this waiver and knowing these facts and in consideration of your accepting my participation, I hereby waive and release Dell Technologies, their representatives and successors from all claims or liabilities of any kind arising out of my participation in the Dell Technologies/Marathon 2019.<br><br>Furthermore, I grant permission to the Organizer and any of its agents or service providers ,to use my name, photographs, motion pictures, recordings or any other record taken in the course of this Event for media activities including but not limited to television channels and social media platforms and for any other legitimate purpose in its sole discretion.<br><br>Name: 		_____________________<br>ID number:		_____________________<br>Address:		_____________________<br>Date:			__/__/2019<br>Signature: 		_____________________<p>",
       nzOnOk: () => console.log('')
     });
   }
@@ -348,7 +339,7 @@ export class SignupFormComponent implements OnInit {
         }
       }
     }
-    
+
     if (flag)
       this.files.push(f)
     // this.uploadFileToActivity(fileType)
@@ -379,24 +370,17 @@ export class SignupFormComponent implements OnInit {
       if (c == 0)
         this.existingID = false
 
-      console.log(c)
-
     } catch (err) {
-      console.log(err.error)
       this.existingID = true;
       this.existingIDMessage = err.error
     }
   }
 
   async clearFiles() {
-    console.log("HIIIIIIIIIIIII")
     for (var i = 0; i < this.files.length; i += 1) {
-      console.log(this.files[i])
       if (this.files[i].fileType == "idf" || this.files[i].fileType == "idb"
         || this.files[i].fileType == "p") {
-        console.log(this.files[i])
         this.files.splice(i, 1)
-        console.log(this.files[i])
       }
     }
     this.signupForm.get('idUploadFront').reset()
@@ -405,13 +389,10 @@ export class SignupFormComponent implements OnInit {
 
   }
 
-  // uploadFileToActivity(fileType) {
-  //   this.userservice.postFile(this.fileToUpload, this.signupForm.value.nationalID, this.signupForm.value.fullName, fileType).subscribe(data => {
-  //     // do something, if upload success
-  //     }, error => {
-  //       console.log(error);
-  //     });
-  // }
+
+  submitClicked() {
+    this.submittedForm = true;
+  }
 
 }
 

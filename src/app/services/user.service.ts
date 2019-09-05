@@ -33,13 +33,12 @@ export class UserService {
     });
   }
 
-  registerParticipants(participants, numberOfMembers):Promise<any>{
-    console.log(participants)
+  registerParticipants(participants, teamName, emails, numberOfMembers):Promise<any>{
     return new Promise((resolve, reject) => {
       const reqHeaders: HttpHeaders = new HttpHeaders();
       reqHeaders.append('Content-Type', 'application/json');
       reqHeaders.append('Access-Control-Allow-Origin', '*');
-      this.http.post("http://ec2-34-222-253-165.us-west-2.compute.amazonaws.com:3200/addUser", {'participants':participants, 'numberOfMembers':numberOfMembers})
+      this.http.post("http://ec2-34-222-253-165.us-west-2.compute.amazonaws.com:3200/addUser", {'participants':participants, 'teamName':teamName, 'emails':emails, 'numberOfMembers':numberOfMembers})
       .subscribe((data) => resolve(data), err => reject(err));
     });
   }
@@ -75,7 +74,6 @@ export class UserService {
         observer.next(xhr.status);
         observer.complete();
       };
-      console.log(file)
       xhr.send(data);
     });
   }

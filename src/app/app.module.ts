@@ -19,6 +19,7 @@ import { HttpModule } from '@angular/http';
 
 import { SignupFormComponent } from './signup-form/signup-form.component';
 import { ResponseComponent } from './response/response.component';
+import { WaiverComponent } from './waiver/waiver.component';
 
 registerLocaleData(en);
 
@@ -29,7 +30,8 @@ registerLocaleData(en);
     HeaderComponent,
     FooterComponent,
     SignupFormComponent,
-    ResponseComponent
+    ResponseComponent,
+    WaiverComponent
   ],
   imports: [
     BrowserModule,

@@ -3,11 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { SignupFormComponent } from './signup-form/signup-form.component';
 import { ResponseComponent } from './response/response.component';
+import { WaiverComponent } from './waiver/waiver.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: HomeComponent
+        component: WaiverComponent
     },
     {
         path: 'signup',

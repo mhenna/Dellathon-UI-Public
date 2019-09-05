@@ -1,3 +1,4 @@
+<div *ngIf="!loading">
 <nz-alert nzType="error" nzCloseable nzMessage="Error "
   nzDescription="Please fill in all the required information so you can complete your sign up process"
   (nzOnClose)="afterClose()" *ngIf="error">
@@ -238,15 +239,15 @@
       </nz-form-control>
     </nz-form-item>
 
-    <!-- <nz-form-item *ngIf="!team || !notFinished">
+    <nz-form-item *ngIf="!team || !notFinished">
       <nz-form-control [nzSm]="16" [nzXs]="24">
         <label nz-checkbox (click)="changeWaiver()">All members included in this form agree to the following </label> <a
           (click)="waiver()">waiver</a>
       </nz-form-control>
-    </nz-form-item> -->
+    </nz-form-item>
 
     <nz-form-item *ngIf="(!team || !notFinished)">
-      <button nz-button nzType="primary" style="margin-top: 5px" (click)="refreshAndAdd()"
+      <button nz-button nzType="primary" style="margin-top: 5px" (click)="refreshAndAdd(); submitClicked()"
         [disabled]='(!memberSignupValid || !waiverAccept || existingID)'>Submit</button>
     </nz-form-item>
     <nz-form-item *ngIf="team && notFinished">
@@ -255,13 +256,15 @@
     </nz-form-item>
     <!-- </div> -->
 
-
-	<span><I>Please do not use the back and forward navigation buttons <br>
-    Please bear in mind that your information along with all your team members' information is not submitted unless you click on </I><I style = "font-weight:bold">Submit</I><I> at the very end</I></span>
-  </div>
+    
+    
+    <span><I>Please do not use the back and forward navigation buttons <br>
+      Please bear in mind that your information along with all your team members' information is not submitted unless you click on </I><I style = "font-weight:bold">Submit</I><I> at the very end</I></span>
+    </div>
 
 </form>
-
+</div>
+<nz-spin nzSimple [nzSize]="'large'" *ngIf="loading" style="flex-direction: column; display: flex; margin-top: 16%; text-align: center"></nz-spin>
 <!-- <div class="form-group">
   <label for="file">Choose File</label>
   <input type="file"
