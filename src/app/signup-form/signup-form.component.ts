@@ -347,12 +347,18 @@ export class SignupFormComponent implements OnInit {
     // this.uploadFileToActivity(fileType)
 
     if (fileType == "p") {
+      this.signupForm.get('idUploadPassport').setValidators([Validators.required])
+      this.signupForm.get('idUploadPassport').updateValueAndValidity()
       this.signupForm.get('idUploadFront').setValidators([])
       this.signupForm.get('idUploadFront').updateValueAndValidity()
       this.signupForm.get('idUploadBack').setValidators([])
       this.signupForm.get('idUploadBack').updateValueAndValidity()
     }
     else if (fileType == "idf" || fileType == "idb") {
+      this.signupForm.get('idUploadFront').setValidators([Validators.required])
+      this.signupForm.get('idUploadFront').updateValueAndValidity()
+      this.signupForm.get('idUploadBack').setValidators([Validators.required])
+      this.signupForm.get('idUploadBack').updateValueAndValidity()
       this.signupForm.get('idUploadPassport').setValidators([])
       this.signupForm.get('idUploadPassport').updateValueAndValidity()
     }
@@ -383,19 +389,18 @@ export class SignupFormComponent implements OnInit {
       if (this.files[i].fileType == "idf" || this.files[i].fileType == "idb"
         || this.files[i].fileType == "p") {
         this.files.splice(i, 1)
+        i = i - 1
       }
     }
     this.signupForm.get('idUploadFront').reset()
     this.signupForm.get('idUploadBack').reset()
     this.signupForm.get('idUploadPassport').reset()
-
   }
 
 
   submitClicked() {
     this.submittedForm = true;
   }
-
 }
 
 interface Participant {

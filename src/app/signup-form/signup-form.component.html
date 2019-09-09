@@ -80,7 +80,7 @@
       <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="nickname" nzRequired>First Name</nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
         <input nz-input id="firstName" formControlName="firstName" style="width: 200px;"
-          (change)="checkFormsValidity()">
+          (change)="checkFormsValidity();">
       </nz-form-control>
     </nz-form-item>
 
@@ -103,7 +103,7 @@
     <nz-form-item>
       <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired>Date of Birth</nz-form-label>
       <nz-form-control [nzSm]="16" [nzXs]="24">
-        <nz-date-picker nzShowDate nzFormat="yyyy-MM-dd" formControlName="DoB" (change)="checkFormsValidity()">
+        <nz-date-picker nzShowDate nzFormat="yyyy-MM-dd" formControlName="DoB" (ngModelChange)="checkFormsValidity()">
         </nz-date-picker>
       </nz-form-control>
     </nz-form-item>
@@ -144,7 +144,7 @@
         <span><I> Alphabetical Characters only</I></span>
       </nz-form-control>
     </nz-form-item>
-    <nz-radio-group formControlName="radioValue" style="margin-left: 17%;" (click)="clearFiles()">
+    <nz-radio-group formControlName="radioValue" style="margin-left: 17%;" (click)="clearFiles(); checkFormsValidity();">
       <label nz-radio nzValue="National ID" >National ID (Locals)</label>
       <label nz-radio nzValue="Passport">Passport (Foreigners only)</label>
     </nz-radio-group>
@@ -222,7 +222,7 @@
         <div class="form-group">
           <label for="file">Choose File</label>
           <input formControlName="uniIdUpload" type="file" id="file"
-            (change)="handleFileInput($event.target.files, 'uid');">
+            (change)="handleFileInput($event.target.files, 'uid');checkFormsValidity();">
 	<span><I>Photographed or scanned copy</I></span>
         </div>
 
@@ -245,17 +245,17 @@
 
     <nz-form-item *ngIf="!team || !notFinished">
       <nz-form-control [nzSm]="16" [nzXs]="24">
-        <label nz-checkbox (click)="changeWaiver()">All members included in this form agree to the following </label> <a
+        <label nz-checkbox (click)="changeWaiver(); checkFormsValidity();">All members included in this form agree to the following </label> <a
           (click)="waiver()">waiver</a>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item *ngIf="(!team || !notFinished)">
-      <button nz-button nzType="primary" style="margin-top: 5px" (click)="refreshAndAdd(); submitClicked()"
+      <button nz-button nzType="primary" style="margin-top: 5px" (click)="refreshAndAdd(); submitClicked(); checkFormsValidity();"
         [disabled]='(!memberSignupValid || !waiverAccept || existingID)'>Submit</button>
     </nz-form-item>
     <nz-form-item *ngIf="team && notFinished">
-      <button nz-button nzType="primary" style="margin-top: 5px" (click)="refreshAndAdd()"
+      <button nz-button nzType="primary" style="margin-top: 5px" (click)="refreshAndAdd(); checkFormsValidity();"
         [disabled]='!memberSignupValid || existingID'>Next Member</button>
     </nz-form-item>
     <!-- </div> -->
