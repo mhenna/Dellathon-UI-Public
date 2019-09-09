@@ -222,7 +222,7 @@ export class SignupFormComponent implements OnInit {
           setTimeout(() => {
             this.loading = false;
             this.router.navigate(['/response']);
-          }, 10000);
+          }, 18000);
 
         } catch (err) {
           throw Error(err);
