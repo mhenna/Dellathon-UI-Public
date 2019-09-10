@@ -7,16 +7,20 @@ import {
   ReactiveFormsModule
 } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd';
+import { IconModule } from '@ant-design/icons-angular';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { UserService } from '../services/user.service';
 import { Router } from "@angular/router";
 import * as mime from 'mime-types'
+
 
 @Component({
   selector: 'app-signup-form',
   templateUrl: './signup-form.component.html',
   styleUrls: ['./signup-form.component.css']
 })
+
+
 export class SignupFormComponent implements OnInit {
 
   errorCode = false
@@ -309,6 +313,15 @@ export class SignupFormComponent implements OnInit {
     this.modalService.info({
       nzTitle: 'Waiver',
       nzContent: "<p>Dell Technologies/ Marathon 2019 Waiver of Participation<br><br> I hereby confirm that I am at least 18 years old, I certify that I’m in a good health, and that I’m medically fit and properly trained to be participating in Dell Technologies/ Marathon 2019 (“Event”) organized by Dell Technologies (“Organizer”). I also confirm my knowledge that my participation may lead to injuries or fatal accidents.<br><br>I also agree to abide by all the Rules & Regulations as provided and as will be provided to me by The Organizer including the right of any official to deny or suspend my participation for any reason whatsoever. I also attest to abide by any decision of any Event official related to my ability to safely complete the event.<br><br>Having read this waiver and knowing these facts and in consideration of your accepting my participation, I hereby waive and release Dell Technologies, their representatives and successors from all claims or liabilities of any kind arising out of my participation in the Dell Technologies/Marathon 2019.<br><br>Furthermore, I grant permission to the Organizer and any of its agents or service providers ,to use my name, photographs, motion pictures, recordings or any other record taken in the course of this Event for media activities including but not limited to television channels and social media platforms and for any other legitimate purpose in its sole discretion.<br><p>",
+      nzOnOk: () => console.log('')
+    });
+  }
+
+  agenda(): void {
+    this.modalService.info({
+      nzTitle: '<h3>Important Timings</h3>',
+      nzContent:" <br> <ul> <li>Gathering Timings:    06:30 am</li> <br> <li>Warm Up:     06:45 am</li> <br> <li>Race Starts:     07:00 am</li> <br>" 
+      + "<li>Cut Off Time:    9:30 am </li><br> <li>Closing Ceremony:  10:00 am </li><br> </ul>",
       nzOnOk: () => console.log('')
     });
   }
