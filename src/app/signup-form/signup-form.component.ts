@@ -319,8 +319,8 @@ export class SignupFormComponent implements OnInit {
 
   agenda(): void {
     this.modalService.info({
-      nzTitle: '<h3>Important Timings</h3>',
-      nzContent:" <br> <ul> <li>Gathering Timings:    06:30 am</li> <br> <li>Warm Up:     06:45 am</li> <br> <li>Race Starts:     07:00 am</li> <br>" 
+      nzTitle: '<h3>The plan for the day:</h3>',
+      nzContent:" <br> <ul> <li> Transportation to the venue: 05:30 am </li><I> Note: Transporation options will be announced</I> <br> <br><li>Arrival to Venue & Entrance:   06:30 am</li> <br> <li>Warm Up:     06:45 am</li> <br> <li>Race Starts:     07:00 am</li> <br>" 
       + "<li>Cut Off Time:    9:30 am </li><br> <li>Closing Ceremony:  10:00 am </li><br> </ul>",
       nzOnOk: () => console.log('')
     });
