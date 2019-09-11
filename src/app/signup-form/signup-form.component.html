@@ -19,6 +19,15 @@
 <div *ngIf="(!codeValid || teamExists)">
   <form nz-form [formGroup]="startOffForm">
     <h1>
+      <nz-form-item>
+        <nz-form-control>
+            <i antIcon type="schedule" theme="outline" style="font-size: '16px'; color: '#08c';"> </i>
+            <a style="margin-top: 5px; margin-left: 5px;" (click)="agenda()"
+            > Check out the Event's Agenda</a>
+          <!-- <label nz-checkbox (click)="changeWaiver();">Check out the Event's Agenda </label> <a
+            (click)="agenda()">waiver</a> -->
+        </nz-form-control>
+      </nz-form-item>
       <nz-form-item><br>
         <nz-form-label nzRequired>Registration Code</nz-form-label>
         <nz-form-control>
@@ -53,7 +62,6 @@
         [disabled]="!startOffValid">Next</button>
 
     </h1>
-
   </form>
 </div>
 

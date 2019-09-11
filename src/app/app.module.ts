@@ -20,6 +20,7 @@ import { HttpModule } from '@angular/http';
 import { SignupFormComponent } from './signup-form/signup-form.component';
 import { ResponseComponent } from './response/response.component';
 import { WaiverComponent } from './waiver/waiver.component';
+import { IconModule } from '@ant-design/icons-angular';
 
 registerLocaleData(en);
 
@@ -43,6 +44,7 @@ registerLocaleData(en);
     ReactiveFormsModule,
     CommonModule,
     HttpModule,
+    IconModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]
